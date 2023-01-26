@@ -1,13 +1,225 @@
-body {
+/* COLORS ----
+
+#1f1e1e - dark
+#e1dfd3 - light
+#5a8077 - accent
+#6b8d85 - accentLight
+#7b9992 - accentLightest
+#51736b - accentDark
+#48665f - accentDarkest
+
+*/
+
+* {
+  padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* input[type="date"]:required:invalid::-webkit-datetime-edit {
+  color: transparent;
 }
+input[type="date"]:focus::-webkit-datetime-edit {
+  color: black !important;
+} */
+
+html,
+body {
+  height: 100vh;
+  width: 100vw;
+  /* background-color: #5a8077; */
+  /* background-color: #272727; */
+  /* color: #ffeedb; */
+  /* color: #e1dfd3; */
+  /* color: #9e0000; */
+  font-family: "Roboto";
+}
+
+/* .page-ctr {
+  height: 100vh;
+  width: 100vw;
+} */
+/* background-color: #1f1e1e; */
+
+/* .page {
+  height: 100vh;
+  width: 100%;
+  padding: 20px;
+} */
+
+/* .error {
+  font-size: 12px;
+  color: #922626;
+} */
+
+/* ! ========= REGISTER PAGE ============ */
+
+/* .form-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  padding: 60px 0;
+} */
+
+/* .register-form-ctr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 40%;
+  height: 100%;
+} */
+
+/* .register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  margin: 0 auto;
+} */
+
+/* .register-input {
+  color: #1f1e1e;
+  width: 100%;
+  border: 2px solid #5a8077;
+  border-radius: 4px;
+  padding: 4px;
+} */
+
+/* .register-input::placeholder {
+  color: #343a36;
+} */
+
+/* .register-input:focus {
+  outline: none;
+} */
+
+/* .input-error {
+  border: 2px solid #922626 !important;
+} */
+
+/* .password-input-inner-ctr {
+  width: 100%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  position: relative;
+} */
+
+/* .vis-icon {
+  position: absolute;
+  right: 6px;
+} */
+
+/* .lr-ctr {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  font-size: 20px;
+} */
+
+/* .social-login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px 0;
+  gap: 10px;
+} */
+
+/* .instead-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 30px;
+} */
+
+/* ! ========= PROFILE DETAILS ============ */
+
+/* .forms-ctr {
+  display: flex;
+  gap: 30px;
+}
+
+.dashboard-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 50px;
+} */
+
+/* .profile-details-ctr {
+  width: 50%;
+  padding: 40px;
+  text-align: center;
+  border: 3px solid #5a8077;
+  border-radius: 4px;
+} */
+
+/* .update-name-email-form {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+} */
+
+/* .inputs-ctr {
+  display: flex;
+  gap: 20px;
+} */
+
+/* .input-ctr {
+  display: flex;
+  flex: 1;
+  gap: 10px;
+} */
+
+/* .profile-detail-input {
+  display: flex;
+  flex: auto;
+} */
+
+/* .reset-password-ctr {
+  padding-top: 20px;
+} */
+
+/* .update-details-btn {
+} */
+
+/* button:disabled {
+  opacity: 0.35;
+} */
+
+/* .upload-photo-ctr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+} */
+
+/* .avatar-ctr {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+} */
+
+.profile-picture-ctr {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* .MuiButtonBase-root {
+  line-height: 0.75;
+  background-color: blue;
+} */
+
+/* 
+
+In this example, I created a background property that defines the main background color of the app, a text property that defines the primary and secondary text color of the app and an accent property that defines the accent color of the app.
+
+Then I used the overrides property to change the default colors of the AppBar, button, and typography components to match the colors defined in the theme.
+
+For example, the background color of the AppBar is set to the background.main and the text color is set to text.primary. Also, the background color of the button is set to accent.main and the text color is set to text.primary and the hover background color is set to accent.dark.
+
+*/
