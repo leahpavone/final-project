@@ -1,20 +1,23 @@
 import { Link } from "react-router-dom";
-import { Container, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import AccountMenu from "../components/AccountMenu";
 import { useContext } from "react";
 import UserContext from "../context/UserContext";
+import AuthContext from "../context/AuthContext";
 
 const Home = () => {
   const { user } = useContext(UserContext);
+  const { currentUser } = useContext(AuthContext); // only for account menu
+
   return (
     <>
-      {user && <AccountMenu />}
+      {currentUser && <AccountMenu />}
       <Container sx={{ textAlign: "center" }}>
-        <Typography variant="h3">listen to your favorite music</Typography>
-        <div className="lr-ctr">
+        <Typography variant="h4">listen to your favorite music</Typography>
+        <Box>
           <Link to="/login">Login</Link>
           <Link to="/register">Register</Link>
-        </div>
+        </Box>
       </Container>
     </>
   );

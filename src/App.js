@@ -18,13 +18,6 @@ function App() {
   const theme = createTheme({
     palette: {
       // mode: "dark",
-      // background: {
-      //   main: "#302f2e"
-      // },
-      // text: {
-      //   light: "#302f2e",
-      //   dark: "#1f1f1f"
-      // },
       primary: {
         // main: blueGrey[300]
         main: "#1f1f1f",
@@ -36,7 +29,8 @@ function App() {
       },
       secondary: {
         main: "#faf9f6",
-        dark: "#7d7d7b",
+        dark: "#c8c7c5",
+        // dark: "#7d7d7b",
         light: "#ffffff"
         // contrastText: "#1f1f1f"
       },
@@ -51,32 +45,30 @@ function App() {
         // light2: "#d2d4e8",
         // contrastText: "#1f1f1f",
         // contrastTextLight: "#faf9f6"
-      },
+      }
       // error: {
       //   main: "#9e0000"
       // },
-      Typography: {
-        // h3: {
-        //   color: "primary.main",
-        //   fontWeight: 800,
-        //   fontSize: "10px"
-        // },
-        // h2: {
-        //   color: "primary.main",
-        //   fontWeight: 500,
-        //   fontSize: "2.5rem"
-        // }
-      },
-      components: {
-        MuiLink: {
-          styleOverrides: {
-            root: {
-              // textDecoration: "none"
-            }
+    },
+    typography: {
+      h3: {
+        color: "primary.main",
+        fontWeight: 800,
+        fontSize: "10px"
+      }
+      // h2: {
+      //   color: "primary.main",
+      //   fontWeight: 500,
+      //   fontSize: "2.5rem"
+      // }
+    },
+    components: {
+      MuiButtonBase: {
+        styleOverrides: {
+          root: {
+            disableRipple: true
+            // textDecoration: "none"
           }
-        },
-        MuiButtonBase: {
-          disableRipple: true
         }
       }
     }

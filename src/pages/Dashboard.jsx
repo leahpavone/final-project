@@ -3,19 +3,27 @@ import { useNavigate, Link } from "react-router-dom";
 import { auth, storage } from "../utilities/firebase";
 import axios from "axios";
 import UserContext from "../context/UserContext";
-import { Button } from "@mui/material";
+import { Button, Paper, Box, Typography } from "@mui/material";
 import AccountMenu from "../components/AccountMenu";
 
 const Dashboard = () => {
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
   const { user } = useContext(UserContext);
 
   return (
-    <div className="page-ctr">
+    <Paper
+      sx={{
+        height: "100vh",
+        width: "100vw",
+        backgroundColor: "primary.main"
+      }}>
       <AccountMenu />
+
       <h1>Dashboard</h1>
-      <h1 className="greeting-header">Hi, {user?.name}</h1>
-    </div>
+      {user && <h1 className="greeting-header">Hi, {user.name}</h1>}
+    </Paper>
   );
 };
 

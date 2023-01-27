@@ -149,7 +149,8 @@ import {
   Container,
   Card,
   CardContent,
-  CardMedia
+  CardMedia,
+  Paper
 } from "@mui/material";
 import { updateNameEmailFormSchema } from "../schemas";
 import { Formik, Form, Field, useFormik } from "formik";
@@ -179,6 +180,7 @@ function ProfileDetails() {
 
       if (user.name !== values.name) {
         // Update display name in firebase
+
         await updateProfile(currentUser, {
           displayName: values.name
         });
@@ -268,185 +270,185 @@ function ProfileDetails() {
   console.log(formik);
 
   return (
-    <div className="page">
-      {/* <Box
-        sx={{
-          width: 30,
-          height: 30,
-          backgroundColor: "accent.main",
-          "&:hover": {
-            backgroundColor: "primary.main",
-            opacity: [0.9, 0.8, 0.7]
-          }
-        }}
-      /> */}
-
+    <Paper
+      sx={{
+        minWidth: "100vw",
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "primary.main"
+      }}>
       <AccountMenu />
 
-      <div className="profile-details-ctr">
+      <Box
+        sx={{
+          backgroundColor: "secondary.main",
+          width: "50%",
+          borderRadius: "4px",
+          border: "3px solid",
+          borderColor: "accent.main",
+          p: "20px"
+        }}>
         <Typography
           variant="h4"
           align="center"
-          lineHeight="1.5"
+          // lineHeight="1.5"
           paddingBottom="30px">
           Account Details
         </Typography>
+        <UploadProfilePhoto />
 
-        <Card
-          sx={{
-            width: "50%",
-            m: "0 auto",
-            border: "3px solid",
-            borderColor: "accent.main",
-            backgroundColor: "accent.main",
-            p: "20px"
-          }}>
-          {/* <div className="upload-photo-ctr"> */}
-          <UploadProfilePhoto />
-          {/* </div> */}
+        <Typography variant="caption" align="center">
+          {fieldError}
+        </Typography>
 
+        <Box component="form" onSubmit={submitProfileDetails}>
           <Box
-            className="update-name-email-form"
-            component="form"
-            onSubmit={submitProfileDetails}>
-            <Box
-              sx={{
-                display: "flex",
-                width: "100%",
-                gap: "30px"
-              }}>
-              <Box sx={{ display: "flex", flex: "1" }}>
-                <TextField
-                  sx={{ width: "100%" }}
-                  // fullWidth
-                  // error={formik.errors.name}
-                  variant="outlined"
-                  label="Name"
-                  disabled={!updateDetails}
-                  type="text"
-                  name="name"
-                  defaultValue={formik.values.name}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-              </Box>
-
-              <Box sx={{ display: "flex", flex: "1" }}>
-                <TextField
-                  // fullWidth
-                  sx={{ width: "100%" }}
-                  // error={formik.errors.email}
-                  variant="outlined"
-                  label="Email"
-                  disabled={!updateDetails}
-                  type="email"
-                  name="email"
-                  defaultValue={formik.values.email}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-              </Box>
+            sx={{
+              display: "flex",
+              width: "100%",
+              gap: "30px"
+            }}>
+            <Box sx={{ display: "flex", flex: "1" }}>
+              <TextField
+                fullWidth
+                error={formik.errors.name}
+                variant="outlined"
+                label="Name"
+                disabled={!updateDetails}
+                type="text"
+                name="name"
+                defaultValue={formik.values.name}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
             </Box>
+
+            <Box sx={{ display: "flex", flex: "1" }}>
+              <TextField
+                fullWidth
+                error={formik.errors.email}
+                variant="outlined"
+                label="Email"
+                disabled={!updateDetails}
+                type="email"
+                name="email"
+                defaultValue={formik.values.email}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
+            </Box>
+          </Box>
+          {/* <Typography variant="caption">{fieldError}</Typography> */}
+
+          <Box sx={{ display: "flex" }}>
             <Button
               // type="submit"
+              disabled={
+                formik.errors.name || formik.errors.email ? true : false
+              }
               variant="contained"
               sx={{
-                mt: "20px",
-                width: "100%",
-                backgroundColor: "primary.main",
                 color: "accent.main",
+                backgroundColor: "transparent",
+                borderColor: "accent.main",
+                border: "2px solid",
+                boxShadow: "none",
+                transition: "all 0.2s ease-in-out",
                 "&:hover": {
-                  // backgroundColor: "primary.main",
-                  // opacity: [0.9, 0.8, 0.7]
+                  backgroundColor: "transparent",
+                  borderColor: "accent.dark",
+                  scale: "101%",
+                  boxShadow: "none"
                 }
               }}
-              className="update-details-btn"
+              // sx={{
+              //   mt: "20px",
+              //   width: "100%",
+              //   backgroundColor: "primary.main",
+              //   color: "accent.main",
+              //   "&:hover": {
+              //     // backgroundColor: "primary.main",
+              //     // opacity: [0.9, 0.8, 0.7]
+              //   }
+              // }}
               onClick={() => {
                 updateDetails && submitProfileDetails(formik.values);
                 setUpdateDetails((prevState) => !prevState);
               }}>
               {updateDetails ? "Done" : "Edit Details"}
             </Button>
-            <Typography variant="caption">{fieldError}</Typography>
+            {/* <Typography variant="caption">{fieldError}</Typography> */}
           </Box>
 
-          <div className="reset-password-ctr">
-            <Button
-              variant="contained"
-              type="button"
-              sx={{
-                mt: "20px",
-                width: "100%",
-                border: "2px solid",
-                borderColor: "primary.main",
-                backgroundColor: "primary.main",
-                color: "accent.main",
-                "&:hover": {
-                  // backgroundColor: "primary.main",
-                  // opacity: "0.9"
-                }
-              }}
-              onClick={handleResetClick}>
-              Reset Password
-            </Button>
-            {isResetting && (
-              <>
-                <form className="reset-password-form" onSubmit={handleSubmit}>
-                  {/* <div className="password-input-ctr"> */}
-                  <label
-                    htmlFor="enter-current-password"
-                    className="reset-password-input-label">
-                    Enter current password:
-                  </label>
-                  <div className="password-input-inner-ctr">
-                    <input
-                      id="newPassword"
-                      type={currentPassVisible ? "text" : "password"}
-                      placeholder="Current password"
-                      // onChange={onChange}
-                      className="register-input"
-                      sx={{ p: 1 }}
-                      ref={currentPasswordRef}
-                      required
-                    />
-                    <div className="vis-icon">
-                      {currentPassVisible ? (
-                        <Visibility
-                          onClick={showCurrentPasswordClick}
-                          sx={{ width: 20 }}
-                        />
-                      ) : (
-                        <VisibilityOff
-                          onClick={showCurrentPasswordClick}
-                          sx={{ width: 20 }}
-                        />
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="input-error-msg">
-                    {fieldError ? (
-                      <div className="error-msg">{fieldError}</div>
+          {/* <Box> */}
+          <Button
+            variant="contained"
+            type="button"
+            sx={{
+              mt: "20px",
+              width: "100%",
+              border: "2px solid",
+              borderColor: "primary.main",
+              backgroundColor: "primary.main",
+              color: "accent.main",
+              "&:hover": {
+                // backgroundColor: "primary.main",
+                // opacity: "0.9"
+              }
+            }}
+            onClick={handleResetClick}>
+            Reset Password
+          </Button>
+          {isResetting && (
+            <>
+              <form onSubmit={handleSubmit}>
+                {/* <div className="password-input-ctr"> */}
+                <label htmlFor="enter-current-password">
+                  Enter current password:
+                </label>
+                <div>
+                  <input
+                    id="newPassword"
+                    type={currentPassVisible ? "text" : "password"}
+                    placeholder="Current password"
+                    sx={{ p: 1 }}
+                    ref={currentPasswordRef}
+                    required
+                  />
+                  <div>
+                    {currentPassVisible ? (
+                      <Visibility
+                        onClick={showCurrentPasswordClick}
+                        sx={{ width: 20 }}
+                      />
                     ) : (
-                      ""
+                      <VisibilityOff
+                        onClick={showCurrentPasswordClick}
+                        sx={{ width: 20 }}
+                      />
                     )}
                   </div>
-                  {/* </div> */}
-                  {isAuthenticated ? (
-                    <></>
-                  ) : (
-                    <button type="submit" className="btn authenticate-btn">
-                      Submit
-                    </button>
-                  )}
-                </form>
-                {isAuthenticated && <ResetPassword />}
-              </>
-            )}
-          </div>
-        </Card>
-      </div>
-    </div>
+                </div>
+
+                <div>{fieldError ? <div>{fieldError}</div> : ""}</div>
+
+                {isAuthenticated ? (
+                  <></>
+                ) : (
+                  <button type="submit" className="btn authenticate-btn">
+                    Submit
+                  </button>
+                )}
+              </form>
+              {isAuthenticated && <ResetPassword />}
+            </>
+          )}
+        </Box>
+      </Box>
+    </Paper>
   );
 }
 

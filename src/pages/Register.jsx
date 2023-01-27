@@ -15,10 +15,7 @@ import {
   Typography,
   InputAdornment,
   TextField,
-  FormHelperText,
   Box,
-  InputLabel,
-  Stack,
   Grid,
   Divider
 } from "@mui/material";
@@ -31,13 +28,12 @@ import {
   VisibilityOff,
   Email,
   Phone,
-  Password,
-  AccountBox,
-  CalendarToday
+  AccountBox
 } from "@mui/icons-material";
 import { registerFormSchema } from "../schemas";
-import { useFormik, Formik, ErrorMessage } from "formik";
-import { blueGrey } from "@mui/material/colors";
+import { useFormik } from "formik";
+import InputField from "../components/InputField";
+// import { styles } from "../components/InputField";
 
 export const CustomTextField = styled(TextField)(({ theme }) => ({
   "& label": {
@@ -78,6 +74,38 @@ export const CustomTextField = styled(TextField)(({ theme }) => ({
   }
 }));
 
+// export const styles = {
+//   textField: {
+//     "& .MuiOutlinedInput-root": {
+//       input: {
+//         color: "accent.dark"
+//       },
+//       "& fieldset": {
+//         borderColor: "accent.main",
+//         borderWidth: "2px"
+//       },
+//       "&:hover:not(.Mui-error) fieldset ": {
+//         borderColor: "accent.dark",
+//         borderWidth: "2px"
+//       },
+//       "&.Mui-focused:not(.Mui-error) fieldset": {
+//         borderColor: "accent.dark",
+//         borderWidth: "2px"
+//       },
+//       "&.Mui-error fieldset": {
+//         borderColor: "error",
+//         borderWidth: "2.5px"
+//       }
+//     },
+//     "& .MuiSvgIcon-root": {
+//       color: "accent.main",
+//       "&.Mui-focused": {
+//         color: "accent.dark"
+//       }
+//     }
+//   }
+// };
+
 const Register = () => {
   const [currentPassVisible, setCurrentPassVisible] = useState(false);
   const [confirmPassVisible, setConfirmPassVisible] = useState(false);
@@ -102,11 +130,12 @@ const Register = () => {
       delete userCredential.password;
       //     const token = await auth.currentUser.getIdToken(true);
 
-      dayjs(userBirthday, "MM/DD/YYYY").isValid();
+      // dayjs(userBirthday, "MM/DD/YYYY").isValid();
 
       await axios
         .post(
           "http://127.0.0.1:5001/final-project-42d93/us-central1/api/createUser",
+
           {
             uid: userCredential.user.uid,
             name,
@@ -121,6 +150,7 @@ const Register = () => {
             ),
             updatedAt: dayjs().format("M/D/YYYY h:mm A")
           }
+          // { Headers: ("Access-Control-Allow-Origin", "*") }
         )
         .catch((error) => console.log(error));
       navigate("/dashboard");
@@ -163,6 +193,16 @@ const Register = () => {
   });
   console.log(formik);
 
+  const [spacing, setSpacing] = useState(6);
+
+  // useEffect(() => {
+  //   if (!formik.errors) {
+  //     setSpacing(0);
+  //   } else {
+  //     setSpacing(2);
+  //   }
+  // }, [formik.errors]);
+
   return (
     <Box
       sx={{
@@ -172,17 +212,20 @@ const Register = () => {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "primary.main"
+        backgroundColor: "secondary.main"
       }}>
       <Box
         sx={{
-          backgroundColor: "secondary.main",
+          // border: "5px solid",
+          backgroundColor: "primary.main",
           width: "50%",
-          height: "550px",
+          height: "max-content",
           borderRadius: "4px",
           p: 3,
           display: "flex",
           flexDirection: "column"
+          // boxShadow: " inset 0 0 7px rgba(255,255,255,0.3)"
+          // boxShadowColor: "rgba(255,255,255,0.3)"
         }}>
         <Typography
           variant="h4"
@@ -204,7 +247,17 @@ const Register = () => {
           }}>
           <Grid container spacing={2}>
             <Grid item xs={6}>
-              <CustomTextField
+              <InputField
+                formik={formik}
+                name="name"
+                label="Name"
+                type="text"
+                placeholder="Full name"
+                value={formik.values.name}
+                // icon={<AccountBox />}
+              />
+
+              {/* <CustomTextField
                 sx={{ display: "flex", flex: "1" }}
                 placeholder="Full name"
                 size="small"
@@ -224,11 +277,20 @@ const Register = () => {
                     </InputAdornment>
                   )
                 }}
-              />
+              /> */}
             </Grid>
 
             <Grid item xs={6}>
-              <CustomTextField
+              <InputField
+                formik={formik}
+                name="email"
+                label="Email"
+                type="email"
+                placeholder="johndoe@gmail.com"
+                value={formik.values.email}
+                // icon={<Email />}
+              />
+              {/* <CustomTextField
                 sx={{ display: "flex", flex: "1" }}
                 placeholder="johndoe@gmail.com"
                 size="small"
@@ -248,11 +310,20 @@ const Register = () => {
                     </InputAdornment>
                   )
                 }}
-              />
+              /> */}
             </Grid>
 
             <Grid item xs={6}>
-              <CustomTextField
+              <InputField
+                formik={formik}
+                name="phoneNumber"
+                label="Phone number"
+                type="text"
+                placeholder="xxx-xxx-xxxx"
+                value={formik.values.phoneNumber}
+                icon={<Phone />}
+              />
+              {/* <CustomTextField
                 sx={{ display: "flex", flex: "1" }}
                 placeholder="xxx-xxx-xxxx"
                 size="small"
@@ -274,54 +345,119 @@ const Register = () => {
                     </InputAdornment>
                   )
                 }}
-              />
+              /> */}
             </Grid>
 
             <Grid item xs={6}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
+                {/* <Typography variant="subtitle2">{label}</Typography> */}
+
                 <DatePicker
                   disableFuture
                   value={userBirthday}
-                  InputAdornmentProps={{ style: { p: 0 } }}
+                  // label="Birthday"
+                  // InputAdornmentProps={{ style: {} }}
                   // value={formik.values.birthday}
                   onChange={(e) => setUserBirthday(e)}
                   mask="__/__/____"
                   inputFormat="MM/DD/YYYY"
                   renderInput={(props) => (
-                    <CustomTextField
-                      {...props}
-                      sx={{ display: "flex", flex: "1" }}
-                      size="small"
-                      placeholder="MM/DD/YYYY"
-                      label="Birthday"
-                      name="birthday"
-                      value={formik.values.birthday}
-                      onChange={formik.handleChange}
-                      helperText={
-                        formik.touched.birthday && formik.errors.birthday
-                      }
-                      error={formik.errors.birthday && formik.touched.birthday}
-                    />
+                    // <InputField
+                    //   {...props}
+                    //   formik={formik}
+                    //   name="birthday"
+                    //   label="Birthday"
+                    //   type="text"
+                    //   placeholder="MM/DD/YYYY"
+                    //   value={formik.values.birthday}
+                    // />
+                    <>
+                      <Typography
+                        variant="subtitle2"
+                        color={
+                          formik.touched.birthday && formik.errors.birthday
+                            ? "error"
+                            : "accent.main"
+                        }>
+                        Birthday
+                      </Typography>
+                      <TextField
+                        {...props}
+                        sx={{
+                          display: "flex",
+                          flex: "1",
+                          "& .MuiOutlinedInput-root": {
+                            input: {
+                              color: "accent.dark"
+                            },
+                            "& ::placeholder": {
+                              color: "accent.light"
+                              // fontSize: "70px"
+                            },
+                            "& fieldset": {
+                              borderColor: "accent.main",
+                              borderWidth: "2px"
+                            },
+                            "&:hover:not(.Mui-error) fieldset ": {
+                              borderColor: "accent.dark",
+                              borderWidth: "2px"
+                            },
+                            "&.Mui-focused:not(.Mui-error) fieldset": {
+                              borderColor: "accent.dark",
+                              borderWidth: "2px"
+                            },
+                            "&.Mui-error fieldset": {
+                              borderColor: "error",
+                              borderWidth: "2.5px"
+                            }
+                          },
+                          "& .MuiSvgIcon-root": {
+                            color: "accent.main",
+                            "&.Mui-focused": {
+                              color: "accent.dark"
+                            }
+                          }
+                        }}
+                        size="small"
+                        placeholder="MM/DD/YYYY"
+                        // label="Birthday"
+                        name="birthday"
+                        value={formik.values.birthday}
+                        onChange={formik.handleChange}
+                        // helperText={
+                        //   formik.touched.birthday && formik.errors.birthday
+                        // }
+                        error={
+                          formik.errors.birthday && formik.touched.birthday
+                        }
+                      />
+                    </>
                   )}
                 />
               </LocalizationProvider>
+              <Typography
+                variant="caption"
+                color={
+                  formik.touched.birthday && formik.errors.birthday
+                    ? "error"
+                    : "accent.main"
+                }>
+                {formik.touched.birthday && formik.errors.birthday
+                  ? formik.errors.birthday
+                  : ""}
+              </Typography>
             </Grid>
 
             <Grid item xs={6}>
-              <CustomTextField
-                placeholder="Password"
-                sx={{ display: "flex", flex: "1" }}
-                size="small"
-                error={formik.errors.password && formik.touched.password}
-                helperText={formik.touched.password && formik.errors.password}
-                variant="outlined"
-                label="Password"
+              {/* <InputField
+                formik={formik}
                 name="password"
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                onBlur={formik.onBlur}
-                id="outlined-adornment-password"
+                label="Password"
                 type={currentPassVisible ? "text" : "password"}
+                placeholder="Password"
+                value={formik.values.phoneNumber}
+                // icon={currentPassVisible ? <Visibility /> : <VisibilityOff />}
+                // InputProps={{ onClick: showCurrentPasswordClick }}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment
@@ -331,29 +467,151 @@ const Register = () => {
                     </InputAdornment>
                   )
                 }}
+              /> */}
+              <Typography
+                variant="subtitle2"
+                color={
+                  formik.touched.password && formik.errors.password
+                    ? "error"
+                    : "accent.main"
+                }>
+                Password
+              </Typography>
+
+              <TextField
+                placeholder="Password"
+                sx={{
+                  display: "flex",
+                  flex: "1",
+                  "& .MuiOutlinedInput-root": {
+                    input: {
+                      color: "accent.dark"
+                    },
+                    "& fieldset": {
+                      borderColor: "accent.main",
+                      borderWidth: "2px"
+                    },
+                    "&:hover:not(.Mui-error) fieldset ": {
+                      borderColor: "accent.light",
+                      borderWidth: "2px"
+                    },
+                    "&.Mui-focused:not(.Mui-error) fieldset": {
+                      borderColor: "accent.light",
+                      borderWidth: "2px"
+                    },
+                    "&.Mui-error fieldset": {
+                      borderColor: "error",
+                      borderWidth: "2.5px"
+                    }
+                  },
+                  "& .MuiSvgIcon-root": {
+                    color: "accent.main",
+                    "&:hover": {
+                      cursor: "pointer"
+                    },
+                    "&.Mui-focused": {
+                      color: "accent.light"
+                    }
+                  }
+                }}
+                size="small"
+                error={formik.errors.password && formik.touched.password}
+                // helperText={formik.touched.password && formik.errors.password}
+                // FormHelperTextProps={{ position: "absolute" }}
+                variant="outlined"
+                // label="Password"
+                name="password"
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                onBlur={formik.onBlur}
+                type={currentPassVisible ? "text" : "password"}
+                InputProps={{
+                  // sx: {styles.textField},
+                  endAdornment: (
+                    <InputAdornment
+                      position="end"
+                      onClick={showCurrentPasswordClick}>
+                      {currentPassVisible ? <Visibility /> : <VisibilityOff />}
+                    </InputAdornment>
+                  )
+                }}
               />
+              <Typography
+                variant="caption"
+                color={
+                  formik.touched.password && formik.errors.password
+                    ? "error"
+                    : "accent.main"
+                }>
+                {formik.touched.password && formik.errors.password}
+              </Typography>
             </Grid>
 
             <Grid item xs={6}>
-              <CustomTextField
+              <Typography
+                variant="subtitle2"
+                color={
+                  formik.touched.confirmPassword &&
+                  formik.errors.confirmPassword
+                    ? "error"
+                    : "accent.main"
+                }>
+                Confirm password
+              </Typography>
+              <TextField
                 placeholder="Confirm password"
-                sx={{ display: "flex", flex: "1" }}
+                sx={{
+                  display: "flex",
+                  flex: "1",
+                  "& .MuiOutlinedInput-root": {
+                    input: {
+                      color: "accent.dark"
+                    },
+                    "& fieldset": {
+                      borderColor: "accent.main",
+                      borderWidth: "2px"
+                    },
+                    "&:hover:not(.Mui-error) fieldset ": {
+                      borderColor: "accent.dark",
+                      borderWidth: "2px"
+                    },
+                    "&.Mui-focused:not(.Mui-error) fieldset": {
+                      borderColor: "accent.dark",
+                      borderWidth: "2px"
+                    },
+                    "&.Mui-error fieldset": {
+                      borderColor: "error",
+                      borderWidth: "2.5px"
+                    }
+                  },
+                  // "&:hover(.MuiInputAdornment-root)": {
+                  //   cursor: "pointer"
+                  // },
+                  "& .MuiSvgIcon-root": {
+                    color: "accent.main",
+                    "&:hover": {
+                      cursor: "pointer"
+                    },
+                    "&.Mui-focused": {
+                      color: "accent.dark"
+                    }
+                  }
+                }}
                 size="small"
                 error={
                   formik.errors.confirmPassword &&
                   formik.touched.confirmPassword
                 }
-                helperText={
-                  formik.touched.confirmPassword &&
-                  formik.errors.confirmPassword
-                }
+                // helperText={
+                //   formik.touched.confirmPassword &&
+                //   formik.errors.confirmPassword
+                // }
                 variant="outlined"
-                label="Confirm Password"
+                // label="Confirm Password"
                 name="confirmPassword"
                 value={formik.values.confirmPassword}
                 onChange={formik.handleChange}
                 onBlur={formik.onBlur}
-                id="outlined-adornment-confirmPassword"
                 type={confirmPassVisible ? "text" : "password"}
                 InputProps={{
                   endAdornment: (
@@ -365,6 +623,15 @@ const Register = () => {
                   )
                 }}
               />
+              <Typography
+                variant="caption"
+                color={
+                  formik.touched.birthday && formik.errors.birthday
+                    ? "error"
+                    : "accent.main"
+                }>
+                {formik.touched.birthday && formik.errors.birthday}
+              </Typography>
             </Grid>
           </Grid>
 
@@ -374,17 +641,17 @@ const Register = () => {
             type="submit"
             disabled={formik.isSubmitting}
             sx={{
-              color: "accent.main",
-              backgroundColor: "transparent",
-              borderColor: "accent.main",
-              border: "2px solid",
+              color: "primary.main",
+              backgroundColor: "accent.main",
+              // borderColor: "accent.main",
+              // border: "2px solid",
               boxShadow: "none",
-              transition: "all 0.2s ease-in-out",
+              // transition: "all 0.3s ease-in-out",
               "&:hover": {
-                backgroundColor: "transparent",
-                borderColor: "accent.dark",
-                scale: "101%",
-                boxShadow: "none"
+                backgroundColor: "accent.dark"
+                // borderColor: "accent.light",
+                // scale: "1.005",
+                // boxShadow: "0 0 4px rgba(0,0,0, 0.5)"
               }
             }}>
             Submit
@@ -401,12 +668,12 @@ const Register = () => {
           <Box sx={{ pt: "24px" }}>
             <Divider
               sx={{
-                color: "rgba(0, 0, 0, 0.2)",
+                color: "rgba(180, 184, 217, 0.4)",
                 "&::before": {
-                  borderTop: "thin solid rgba(0, 0, 0, 0.2)"
+                  borderTop: "thin solid rgba(180, 184, 217, 0.4)"
                 },
                 "&::after": {
-                  borderTop: "thin solid rgba(0, 0, 0, 0.2)"
+                  borderTop: "thin solid rgba(180, 184, 217, 0.4)"
                 }
               }}>
               or
@@ -421,7 +688,7 @@ const Register = () => {
               flexDirection: "column",
               alignItems: "center"
             }}>
-            <Typography variant="p" sx={{ color: "primary.light" }}>
+            <Typography variant="p" sx={{ color: "rgba(180, 184, 217, 0.4)" }}>
               Already have an account?
             </Typography>
             <Button
@@ -429,7 +696,7 @@ const Register = () => {
               variant="text"
               sx={{
                 backgroundColor: "transparent",
-                color: "primary.main",
+                color: "accent.main",
                 width: "fit-content",
                 transition: "all 0.2s ease-in-out",
                 "&:hover": {

@@ -66,6 +66,8 @@ const UploadProfilePhoto = () => {
     }
   }, [user]);
 
+  console.log(user);
+
   return (
     <Box
       sx={{
@@ -97,7 +99,7 @@ const UploadProfilePhoto = () => {
           <input type="file" accept="image/*" onChange={handleChange} hidden />
         </Button>
       ) : (
-        <div>
+        <Box>
           <LoadingButton
             variant="contained"
             sx={{ height: "30px", width: "250px", color: "accent.main" }}
@@ -106,7 +108,7 @@ const UploadProfilePhoto = () => {
             <span>Upload</span>
           </LoadingButton>
           {photo.name}
-        </div>
+        </Box>
       )}
     </Box>
   );

@@ -1,5 +1,4 @@
 import * as yup from "yup";
-import dayjs from "dayjs";
 
 // min 6 characters, 1 upper case letter, 1 lower case letter, 1 numeric digit.
 const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
@@ -26,8 +25,6 @@ export const registerFormSchema = yup.object().shape({
     .oneOf([yup.ref("password"), null], "Passwords must match")
     .required("Required")
 });
-
-// formatBirthday(registerFormSchema.birthday);
 
 export const loginFormSchema = yup.object().shape({
   email: yup.string().email("Please enter a valid email").required("Required"),
