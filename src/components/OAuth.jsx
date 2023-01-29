@@ -52,7 +52,7 @@ function OAuth() {
           photoURL: null,
           playlists: [],
           favorites: [],
-          createdAt: dayjs().format("M/D/YYYY h:mm A"),
+          createdAt: dayjs(new Date()).format("M/D/YYYY h:mm A"),
           updatedAt: dayjs().format("M/D/YYYY h:mm A")
         });
       }
@@ -76,8 +76,10 @@ function OAuth() {
         onClick={onGoogleClick}
         sx={{
           cursor: "pointer",
-          backgroundColor: "secondary.light",
-          boxShadow: "0 0 2px rgba(0, 0, 0, 0.6)",
+          backgroundColor: "secondary.main",
+          boxShadow: "0 0 2px rgba(255,255,255, 0.4)",
+          // border: "2px solid",
+          // borderColor: "primary.dark",
           // opacity: "0.8",
           // width: "fit-content",
           p: 1,
@@ -85,7 +87,7 @@ function OAuth() {
           alignItems: "center",
           gap: "6px",
           borderRadius: "4px",
-          border: "none",
+          // border: "none",
           // border: "2px solid",
           // borderColor: "accent.veryDark",
           "&:hover": {
@@ -93,10 +95,10 @@ function OAuth() {
             // borderColor: "primary",
             // opacity: "0.5",
             backgroundColor: "secondary.light",
-            transform: "scaleX(1.01)",
+            // transform: "scaleX(1.01)",
             // scale: "101%",
             transition: "all 0.2s ease",
-            boxShadow: "0 0 6px rgba(0, 0, 0, 0.3)"
+            boxShadow: "0 0 6px rgba(255,255,255, 0.3)"
           }
         }}>
         <img

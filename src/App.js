@@ -12,62 +12,147 @@ import ProfileDetails from "./pages/ProfileDetails";
 import { UserProvider } from "./context/UserContext";
 import { CssBaseline } from "@mui/material";
 import { purple, blueGrey } from "@mui/material/colors";
-// import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 function App() {
   const theme = createTheme({
     palette: {
+      background: "#1a1a1a",
       // mode: "dark",
+      text: {
+        disabled: "#4c4c4c"
+      },
       primary: {
-        // main: blueGrey[300]
-        main: "#1f1f1f",
-        dark: "#191919",
-        // dark2: "#131313",
-        light: "#4c4c4c"
-        // light2: "#797979",
-        // contrastText: "#faf9f6"
+        main: "#1a1a1a",
+        dark: "#171717",
+        light: "#313131"
       },
       secondary: {
         main: "#faf9f6",
         dark: "#c8c7c5",
-        // dark: "#7d7d7b",
         light: "#ffffff"
-        // contrastText: "#1f1f1f"
       },
       accent: {
-        main: "#b4b8d9",
-
-        dark: "#7e8198",
-        dark2: "#6c6e82",
-        // dark2: "#484a57",
-        // dark3: "#24252b",
-        light: "#c3c6e1"
-        // light2: "#d2d4e8",
-        // contrastText: "#1f1f1f",
-        // contrastTextLight: "#faf9f6"
+        main: "#b59bca",
+        dark: "#917ca2",
+        light: "#c4afd5",
+        disabled: "#5b4e65"
+      },
+      error: {
+        main: "#fff"
+      },
+      disabled: {
+        main: "#483e51"
       }
-      // error: {
-      //   main: "#9e0000"
-      // },
     },
     typography: {
+      // color: "#B59BCA",
       h3: {
-        color: "primary.main",
-        fontWeight: 800,
-        fontSize: "10px"
+        color: "#B59BCA",
+        fontWeight: 700,
+        fontSize: "64px"
+      },
+      h2: {
+        color: "accent.main",
+        fontWeight: 500,
+        fontSize: "2.5rem"
+      },
+      p: {
+        color: "accent.main",
+        // fontWeight: 500,
+        fontSize: "14px"
       }
-      // h2: {
-      //   color: "primary.main",
-      //   fontWeight: 500,
-      //   fontSize: "2.5rem"
-      // }
     },
     components: {
-      MuiButtonBase: {
+      MuiCssBaseline: {
         styleOverrides: {
-          root: {
-            disableRipple: true
-            // textDecoration: "none"
+          "&.MuiTypography-root": {
+            color: "#b59bca",
+            "&.Mui-disabled": {
+              color: "#5b4e65"
+            }
+          },
+          "&.MuiInputBase-root": {
+            "&.MuiOutlinedInput-root": {
+              display: "flex",
+              flex: 1,
+              input: {
+                color: "#917ca2"
+              },
+              "&.Mui-disabled": {
+                borderColor: "#5b4e65",
+                border: "2px solid"
+              },
+              "& fieldset": {
+                borderColor: "#b59bca",
+                borderWidth: "2px"
+              },
+              "&:hover:not(.Mui-error):not(.Mui-disabled) fieldset ": {
+                borderColor: "#917ca2",
+                borderWidth: "2px"
+              },
+              "&.Mui-focused:not(.Mui-error):not(.Mui-disabled) fieldset": {
+                borderColor: "#917ca2",
+                borderWidth: "2.5px"
+              },
+              "&.Mui-error fieldset": {
+                borderColor: "#fff",
+                borderWidth: "2.5px"
+              }
+            },
+            "& .MuiSvgIcon-root": {
+              color: "#b59bca",
+              "&:hover": {
+                cursor: "pointer",
+                color: "#917ca2"
+              },
+              "&.Mui-focused": {
+                color: "#917ca2"
+              }
+            }
+          },
+          "& .MuiButtonBase-root": {
+            "&.MuiButton-contained": {
+              color: "#1a1a1a",
+              backgroundColor: "#b59bca",
+              "&:hover": {
+                backgroundColor: "#917ca2",
+                boxShadow: "none"
+              },
+              "&.Mui-disabled": {
+                backgroundColor: "#5b4e65"
+              }
+            },
+            "&.MuiButton-outlined": {
+              color: "#b59bca",
+              backgroundColor: "transparent",
+              border: "2px solid",
+              borderColor: "#b59bca",
+              "&:hover": {
+                backgroundColor: "transparent",
+                border: "2px solid",
+                borderColor: "#917ca2",
+                boxShadow: "none"
+              },
+              "&.Mui-disabled": {
+                backgroundColor: "transparent",
+                border: "2px solid",
+                borderColor: "#5b4e65",
+                color: "#5b4e65"
+              }
+            },
+            "&.MuiButton-text": {
+              color: "#b59bca",
+              backgroundColor: "transparent",
+              "&:hover": {
+                backgroundColor: "transparent",
+
+                color: "#917ca2",
+                boxShadow: "none"
+              },
+              "&.Mui-disabled": {
+                color: "#5b4e65"
+              }
+            }
           }
         }
       }
@@ -75,31 +160,29 @@ function App() {
   });
 
   return (
-    <>
-      {/* <LocalizationProvider dateAdapter={AdapterDayjs}> */}
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <AuthProvider>
-          <UserProvider>
-            <Router>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route path="/dashboard" element={<PrivateRoute />}>
-                  <Route path="/dashboard" element={<Dashboard />} />
-                </Route>
-                <Route path="/profile-details" element={<PrivateRoute />}>
-                  <Route path="/profile-details" element={<ProfileDetails />} />
-                </Route>
-              </Routes>
-            </Router>
-          </UserProvider>
-        </AuthProvider>
-      </ThemeProvider>
-      {/* </LocalizationProvider> */}
-    </>
+    // <>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <AuthProvider>
+        <UserProvider>
+          <Router>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/dashboard" element={<PrivateRoute />}>
+                <Route path="/dashboard" element={<Dashboard />} />
+              </Route>
+              <Route path="/profile-details" element={<PrivateRoute />}>
+                <Route path="/profile-details" element={<ProfileDetails />} />
+              </Route>
+            </Routes>
+          </Router>
+        </UserProvider>
+      </AuthProvider>
+    </ThemeProvider>
+    // {/* </> */}
   );
 }
 

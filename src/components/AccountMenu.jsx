@@ -37,7 +37,7 @@ const AccountMenu = () => {
   };
 
   return (
-    <>
+    <Box>
       <Box
         sx={{
           right: 16,
@@ -75,6 +75,8 @@ const AccountMenu = () => {
             overflow: "visible",
             filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
             mt: 1,
+            backgroundColor: "accent.main",
+            color: "primary.main",
             "& .MuiAvatar-root": {
               width: 32,
               height: 32,
@@ -121,7 +123,7 @@ const AccountMenu = () => {
           Logout
         </MenuItem>
       </Menu>
-    </>
+    </Box>
   );
 };
 

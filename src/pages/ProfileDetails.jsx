@@ -150,17 +150,21 @@ import {
   Card,
   CardContent,
   CardMedia,
-  Paper
+  Paper,
+  InputAdornment
 } from "@mui/material";
 import { updateNameEmailFormSchema } from "../schemas";
 import { Formik, Form, Field, useFormik } from "formik";
 import UploadProfilePhoto from "../components/UploadProfilePhoto";
+import InputField from "../components/InputField";
+import { StyledTextField } from "../components/InputField";
 
 function ProfileDetails() {
   const [currentPassVisible, setCurrentPassVisible] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const [currentPasswordError, setCurrentPasswordError] = useState(false);
+  // const [currentPassword, setCurrentPassword] = useState("");
   const [fieldError, setFieldError] = useState("");
   const [isResetting, setIsResetting] = useState(false);
   const [updateDetails, setUpdateDetails] = useState(false);
@@ -250,6 +254,7 @@ function ProfileDetails() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(currentPasswordRef);
     try {
       await reauthenticate(currentPasswordRef.current.value);
       setCurrentPasswordError(false);
@@ -257,6 +262,7 @@ function ProfileDetails() {
       setCurrentPasswordError(true);
       console.log(error);
     }
+    console.log(currentPasswordRef.current.value);
   };
 
   const formik = useFormik({
@@ -267,40 +273,54 @@ function ProfileDetails() {
     validationSchema: updateNameEmailFormSchema,
     onSubmit: submitProfileDetails
   });
-  console.log(formik);
 
   return (
-    <Paper
+    <Container
+      maxWidth="100vw"
       sx={{
-        minWidth: "100vw",
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "primary.main"
+        backgroundColor: "primary.main",
+        p: "40px"
       }}>
       <AccountMenu />
 
+      {/* PUT LEFT SIDE MENU WITH FAVORITES AND PLAYLISTS */}
+
       <Box
         sx={{
-          backgroundColor: "secondary.main",
-          width: "50%",
-          borderRadius: "4px",
-          border: "3px solid",
-          borderColor: "accent.main",
-          p: "20px"
+          backgroundColor: "primary.main",
+          display: "flex",
+          flexDirection: "column",
+
+          // height: "100%",
+          width: "50%"
+          // borderRadius: "4px",
+          // border: "3px solid",
+          // borderColor: "accent.main",
+          // p: "20px",
+          // m: "60px"
         }}>
         <Typography
           variant="h4"
           align="center"
-          // lineHeight="1.5"
+          // color="accent.main"
           paddingBottom="30px">
           Account Details
         </Typography>
         <UploadProfilePhoto />
 
-        <Typography variant="caption" align="center">
+        <Typography
+          variant="caption"
+          sx={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            color: "accent.main"
+          }}>
           {fieldError}
         </Typography>
 
@@ -309,35 +329,79 @@ function ProfileDetails() {
             sx={{
               display: "flex",
               width: "100%",
-              gap: "30px"
+              gap: "30px",
+              paddingBottom: "20px"
             }}>
-            <Box sx={{ display: "flex", flex: "1" }}>
-              <TextField
-                fullWidth
-                error={formik.errors.name}
-                variant="outlined"
-                label="Name"
+            <Box sx={{ display: "flex", flexDirection: "column", flex: "1" }}>
+              <Typography
+                variant="subtitle2"
+                color={formik.errors.name ? "error" : "accent.main"}>
+                Name
+              </Typography>
+              <StyledTextField
+                required
                 disabled={!updateDetails}
-                type="text"
+                error={formik.errors.name}
+                formik={formik}
                 name="name"
+                type="text"
                 defaultValue={formik.values.name}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
+                // sx={{
+                //   "& .MuiOutlinedInput-root.Mui-disabled": {
+                //     input: {
+                //       color: "accent.disabled !important"
+                //     },
+                //     fieldset: {
+                //       borderColor: "accent.disabled !important",
+                //       border: "2px solid"
+                //     },
+                //     "&:hover fieldset": {
+                //       borderColor: "accent.disabled !important",
+                //       border: "2px solid"
+                //     }
+                //   }
+                // }}
               />
             </Box>
 
-            <Box sx={{ display: "flex", flex: "1" }}>
+            <Box sx={{ display: "flex", flexDirection: "column", flex: "1" }}>
+              <Typography
+                variant="subtitle2"
+                color={
+                  formik.touched.email && formik.errors.email
+                    ? "error"
+                    : "accent.main"
+                }>
+                Email
+              </Typography>
               <TextField
                 fullWidth
+                disabled={!updateDetails}
                 error={formik.errors.email}
                 variant="outlined"
-                label="Email"
-                disabled={!updateDetails}
+                // label="Email"
                 type="email"
                 name="email"
                 defaultValue={formik.values.email}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
+                // sx={{
+                //   "& .MuiOutlinedInput-root.Mui-disabled": {
+                //     input: {
+                //       color: "yellow !important"
+                //     },
+                //     fieldset: {
+                //       borderColor: "accent.disabled !important",
+                //       border: "2px solid"
+                //     },
+                //     "&:hover fieldset": {
+                //       borderColor: "accent.disabled !important",
+                //       border: "2px solid"
+                //     }
+                //   }
+                // }}
               />
             </Box>
           </Box>
@@ -345,35 +409,26 @@ function ProfileDetails() {
 
           <Box sx={{ display: "flex" }}>
             <Button
+              fullWidth
               // type="submit"
               disabled={
                 formik.errors.name || formik.errors.email ? true : false
               }
               variant="contained"
-              sx={{
-                color: "accent.main",
-                backgroundColor: "transparent",
-                borderColor: "accent.main",
-                border: "2px solid",
-                boxShadow: "none",
-                transition: "all 0.2s ease-in-out",
-                "&:hover": {
-                  backgroundColor: "transparent",
-                  borderColor: "accent.dark",
-                  scale: "101%",
-                  boxShadow: "none"
+              sx={
+                {
+                  // color: "primary.main",
+                  // backgroundColor: "accent.main",
+                  // "&:hover": {
+                  //   backgroundColor: "accent.dark",
+                  //   boxShadow: "none"
+                  // },
+                  // "&.Mui-disabled": {
+                  //   backgroundColor: "accent.dark",
+                  //   boxShadow: "none"
+                  // }
                 }
-              }}
-              // sx={{
-              //   mt: "20px",
-              //   width: "100%",
-              //   backgroundColor: "primary.main",
-              //   color: "accent.main",
-              //   "&:hover": {
-              //     // backgroundColor: "primary.main",
-              //     // opacity: [0.9, 0.8, 0.7]
-              //   }
-              // }}
+              }
               onClick={() => {
                 updateDetails && submitProfileDetails(formik.values);
                 setUpdateDetails((prevState) => !prevState);
@@ -382,74 +437,186 @@ function ProfileDetails() {
             </Button>
             {/* <Typography variant="caption">{fieldError}</Typography> */}
           </Box>
-
-          {/* <Box> */}
-          <Button
-            variant="contained"
-            type="button"
-            sx={{
-              mt: "20px",
-              width: "100%",
-              border: "2px solid",
-              borderColor: "primary.main",
-              backgroundColor: "primary.main",
-              color: "accent.main",
-              "&:hover": {
-                // backgroundColor: "primary.main",
-                // opacity: "0.9"
-              }
-            }}
-            onClick={handleResetClick}>
-            Reset Password
-          </Button>
-          {isResetting && (
-            <>
-              <form onSubmit={handleSubmit}>
-                {/* <div className="password-input-ctr"> */}
-                <label htmlFor="enter-current-password">
-                  Enter current password:
-                </label>
-                <div>
-                  <input
-                    id="newPassword"
-                    type={currentPassVisible ? "text" : "password"}
-                    placeholder="Current password"
-                    sx={{ p: 1 }}
-                    ref={currentPasswordRef}
-                    required
-                  />
-                  <div>
-                    {currentPassVisible ? (
-                      <Visibility
-                        onClick={showCurrentPasswordClick}
-                        sx={{ width: 20 }}
-                      />
-                    ) : (
-                      <VisibilityOff
-                        onClick={showCurrentPasswordClick}
-                        sx={{ width: 20 }}
-                      />
-                    )}
-                  </div>
-                </div>
-
-                <div>{fieldError ? <div>{fieldError}</div> : ""}</div>
-
-                {isAuthenticated ? (
-                  <></>
-                ) : (
-                  <button type="submit" className="btn authenticate-btn">
-                    Submit
-                  </button>
-                )}
-              </form>
-              {isAuthenticated && <ResetPassword />}
-            </>
-          )}
         </Box>
+        <Button
+          variant="contained"
+          type="button"
+          sx={{
+            mt: "20px",
+            width: "100%",
+            // border: "2px solid",
+            // borderColor: "primary.main",
+            border: "none",
+            backgroundColor: "accent.main",
+            color: "primary.main",
+            "&:hover": {
+              backgroundColor: "accent.dark"
+              // opacity: "0.9"
+            }
+          }}
+          onClick={handleResetClick}>
+          {isResetting ? "Cancel Reset Password" : "Reset Password"}
+        </Button>
+
+        {isResetting && (
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: "40px"
+              // width: "100%"
+              // justifyContent: "space-evenly"
+            }}>
+            <Box
+              component="form"
+              onSubmit={handleSubmit}
+              sx={{
+                pt: "20px",
+                width: "100%",
+                display: "flex",
+                flexDirection: "column",
+                // justifyContent: "flex-start",
+                gap: "10px"
+              }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "flex-start",
+                  gap: "10px",
+                  width: "100%"
+                }}>
+                <Typography variant="subtitle2" color="accent.main">
+                  Enter current password
+                </Typography>
+                <TextField
+                  disabled={isAuthenticated}
+                  // sx={{
+                  //   width: "100%",
+                  //   "& .MuiOutlinedInput-root.Mui-disabled": {
+                  //     input: {
+                  //       color: "accent.disabled !important"
+                  //     },
+                  //     fieldset: {
+                  //       borderColor: "accent.disabled !important",
+                  //       border: "2px solid"
+                  //     },
+                  //     "&:hover fieldset": {
+                  //       borderColor: "accent.disabled !important",
+                  //       border: "2px solid"
+                  //     }
+                  //   }
+                  // }}
+                  // sx={{
+                  // width: "100%",
+                  //   "& .MuiOutlinedInput-root.Mui-disabled": {
+                  //     fieldset: {
+                  //       borderColor: "accent.disabled !important",
+                  //       border: "2px solid"
+                  //     },
+                  //     "& .MuiSvgIcon-root": {
+                  //       color: "accent.disabled !important",
+                  //       "&.Mui-focused": {
+                  //         color: "accent.disabled !important"
+                  //       }
+                  //     }
+                  //   }
+                  // }}
+                  placeholder="Current password"
+                  size="small"
+                  inputRef={currentPasswordRef}
+                  variant="outlined"
+                  type={currentPassVisible ? "text" : "password"}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment
+                        position="end"
+                        onClick={showCurrentPasswordClick}>
+                        {currentPassVisible ? (
+                          <Visibility />
+                        ) : (
+                          <VisibilityOff />
+                        )}
+                      </InputAdornment>
+                    )
+                  }}
+                />
+
+                {/* <Box>
+                  {fieldError ? <Box color="error.main">{fieldError}</Box> : ""}
+                </Box> */}
+              </Box>
+
+              <Button
+                disabled={isAuthenticated}
+                onClick={handleSubmit}
+                // variant="outlined"
+                type="submit"
+                component="label"
+                sx={{
+                  // color: "primary.main",
+                  // backgroundColor: "accent.main",
+                  backgroundColor: "transparent",
+                  color: "accent.main",
+                  // "&.Mui-disabled": {
+                  //   color: "accent.dark"
+                  // },
+                  "&:hover": {
+                    backgroundColor: "accent.dark",
+                    boxShadow: "none"
+                  }
+                }}>
+                Submit
+              </Button>
+            </Box>
+            {isAuthenticated && <ResetPassword />}
+          </Box>
+        )}
       </Box>
-    </Paper>
+    </Container>
   );
 }
 
 export default ProfileDetails;
+
+// eslint-disable-next-line no-lone-blocks
+{
+  /* <form onSubmit={handleSubmit}>
+              <label htmlFor="enter-current-password">
+                Enter current password:
+              </label>
+              <div>
+                <input
+                  id="newPassword"
+                  type={currentPassVisible ? "text" : "password"}
+                  placeholder="Current password"
+                  sx={{ p: 1 }}
+                  ref={currentPasswordRef}
+                  required
+                />
+                <div>
+                  {currentPassVisible ? (
+                    <Visibility
+                      onClick={showCurrentPasswordClick}
+                      sx={{ width: 20 }}
+                    />
+                  ) : (
+                    <VisibilityOff
+                      onClick={showCurrentPasswordClick}
+                      sx={{ width: 20 }}
+                    />
+                  )}
+                </div>
+              </div>
+
+              <div>{fieldError ? <div>{fieldError}</div> : ""}</div>
+
+              {isAuthenticated ? (
+                <></>
+              ) : (
+                <button type="submit" className="btn authenticate-btn">
+                  Submit
+                </button>
+              )}
+            </form> */
+}

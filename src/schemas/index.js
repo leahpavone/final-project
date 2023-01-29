@@ -1,7 +1,8 @@
 import * as yup from "yup";
+import dayjs from "dayjs";
 
 // min 6 characters, 1 upper case letter, 1 lower case letter, 1 numeric digit.
-const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
+export const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/;
 
 export const registerFormSchema = yup.object().shape({
   name: yup.string().required("Required"),
@@ -11,6 +12,7 @@ export const registerFormSchema = yup.object().shape({
     .date()
     .typeError("Please enter a valid date")
     .min(new Date(1900, 0, 1), "Please enter a valid date")
+    .max(new Date(), "Please enter a valid date")
     .required("Required"),
   password: yup
     .string()
