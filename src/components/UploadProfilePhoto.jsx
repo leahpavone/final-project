@@ -6,38 +6,32 @@ import UserContext from "../context/UserContext";
 import { updateDoc, doc } from "firebase/firestore";
 import { updateProfile } from "firebase/auth";
 import dayjs from "dayjs";
-import { LoadingButton } from "@mui/lab";
-import { Container } from "@mui/system";
-
-// ! Question : when to set loading back to false
+import { UploadProfilePhotoSpinner } from "./Spinners";
 
 const UploadProfilePhoto = () => {
   const [photoURL, setPhotoURL] = useState(<Avatar />);
-  const [photo, setPhoto] = useState(null);
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const { user } = useContext(UserContext);
 
-  // const handleChange = (e) => {
-  //   if (e.target.files[0]) {
-  //     setPhoto(e.target.files[0]);
-  //     console.log(e.target.files[0]);
-  //   }
-  // };
-
   const handleChange = async (e) => {
+    setUploadingPhoto(true);
+    const value = e?.target?.files[0];
+    await handleUpload(value);
+    console.log("after change", value);
+    setUploadingPhoto(false);
+  };
+
+  const handleUpload = async (photo) => {
     setLoading(true);
     try {
-      setPhoto(e.target.files[0]);
-      console.log(e.target.files[0]);
       const photoRef = ref(storage, user.uid);
       await uploadBytes(photoRef, photo)
         .then(() => {
-          // setLoading(true);
-
           getDownloadURL(photoRef)
             .then((url) => {
-              // setLoading(true);
               setPhotoURL(url);
               updateProfile(auth.currentUser, {
                 photoURL: url
@@ -59,13 +53,10 @@ const UploadProfilePhoto = () => {
             .catch((error) => {
               console.log(error.message, "error getting the image url");
             });
-          // setLoading(false);
-          // setPhoto(null);
         })
         .catch((error) => {
           console.log(error.message);
         });
-      // setLoading(false);
     } catch (error) {
       console.log(error.message);
     }
@@ -79,40 +70,48 @@ const UploadProfilePhoto = () => {
   }, [user, photoURL]);
 
   if (loading) {
-    // return setTimeout(() => {
-    return <div>Loading...</div>;
-    // }, 3000);
+    return <UploadProfilePhotoSpinner />;
   }
-
-  // console.log(user);
 
   return (
     <Box
       sx={{
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
-        mb: "30px"
+        alignItems: "center"
+        // mb: "30px"
       }}>
-      <Box>
-        <Avatar
-          src={photoURL.toString()}
-          sx={{ width: 175, height: 175, mb: "10px" }}
-        />
+      <Box
+        sx={{
+          height: 175,
+          width: 200,
+          mb: "10px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center"
+          // position: "relative"
+        }}>
+        {loading ? (
+          <UploadProfilePhotoSpinner />
+        ) : (
+          <Box>
+            {user?.photoURL ? (
+              <Avatar
+                src={user.photoURL.toString()}
+                sx={{ width: 175, height: 175 }}
+              />
+            ) : (
+              <Avatar sx={{ width: 175, height: 175 }} />
+            )}
+          </Box>
+        )}
       </Box>
 
       <Button
+        disabled={uploadingPhoto}
         variant="contained"
         component="label"
-        sx={{
-          height: "30px",
-          width: "250px",
-          color: "primary.main",
-          backgroundColor: "accent.main",
-          "&:hover": {
-            backgroundColor: "accent.dark"
-          }
-        }}>
+        sx={{}}>
         Change profile photo
         <input type="file" accept="image/*" onChange={handleChange} hidden />
       </Button>
@@ -121,43 +120,3 @@ const UploadProfilePhoto = () => {
 };
 
 export default UploadProfilePhoto;
-
-// eslint-disable-next-line no-lone-blocks
-{
-  /* <Box>
-        {!photoURL ? (
-          <Avatar />
-        ) : (
-          <Avatar
-            src={photoURL.toString()}
-            sx={{ width: 175, height: 175, mb: "10px" }}
-          />
-        )}
-      </Box>
-
-      {!photo ? (
-        <Button
-          variant="contained"
-          component="label"
-          sx={{
-            height: "30px",
-            width: "250px",
-            color: "accent.main"
-          }}>
-          Change profile photo
-          <input type="file" accept="image/*" onChange={handleChange} hidden />
-        </Button>
-      ) : (
-        <Box>
-          <LoadingButton
-            variant="contained"
-            sx={{ height: "30px", width: "250px", color: "accent.main" }}
-            loading={loading}
-            onClick={handleClick}>
-            <Typography variant="span">Upload</Typography>
-          </LoadingButton>
-          {photo.name}
-        </Box>
-      )}
-    </Box> */
-}

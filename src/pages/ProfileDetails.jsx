@@ -134,7 +134,7 @@ import {
 import { auth } from "../utilities/firebase";
 import { useNavigate, Link } from "react-router-dom";
 import ResetPassword from "../components/ResetPassword";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { ErrorOutline, Visibility, VisibilityOff } from "@mui/icons-material";
 import dayjs from "dayjs";
 import axios from "axios";
 import AccountMenu from "../components/AccountMenu";
@@ -144,26 +144,23 @@ import {
   Typography,
   Box,
   TextField,
-  InputLabel,
-  FormHelperText,
   Container,
-  Card,
-  CardContent,
-  CardMedia,
-  Paper,
-  InputAdornment
+  InputAdornment,
+  Divider
 } from "@mui/material";
 import { updateNameEmailFormSchema } from "../schemas";
 import { Formik, Form, Field, useFormik } from "formik";
 import UploadProfilePhoto from "../components/UploadProfilePhoto";
 import InputField from "../components/InputField";
-import { StyledTextField } from "../components/InputField";
+import UserDrawer from "../components/UserDrawer";
+// import { StyledTextField } from "../components/InputField";
 
 function ProfileDetails() {
   const [currentPassVisible, setCurrentPassVisible] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const [currentPasswordError, setCurrentPasswordError] = useState(false);
+  const [currentPasswordError, setCurrentPasswordError] = useState("");
+  const [cPassError, setCPassError] = useState(false);
   // const [currentPassword, setCurrentPassword] = useState("");
   const [fieldError, setFieldError] = useState("");
   const [isResetting, setIsResetting] = useState(false);
@@ -184,7 +181,6 @@ function ProfileDetails() {
 
       if (user.name !== values.name) {
         // Update display name in firebase
-
         await updateProfile(currentUser, {
           displayName: values.name
         });
@@ -201,7 +197,13 @@ function ProfileDetails() {
             updatedAt: dayjs().format("M/D/YYYY h:mm A")
           }
         )
-        .then(setFieldError("Successfully updated profile details"))
+        .then(
+          setFieldError(
+            user.name !== values.name || user.email !== values.email
+              ? "Successfully updated profile details"
+              : ""
+          )
+        )
         .catch((error) => console.log(error))
         .then(
           setTimeout(() => {
@@ -236,19 +238,25 @@ function ProfileDetails() {
       );
       console.log(result);
       setIsAuthenticated(true);
-      setCurrentPasswordError(false);
-      setFieldError("");
+      setCurrentPasswordError("");
+      setCPassError(false);
+      // setFieldError("");
     } catch (error) {
-      console.log(error);
+      console.log(error.code);
 
       if (error.code === "auth/wrong-password") {
-        setFieldError("Password does not match");
+        // setFieldError("Password does not match");
+        setCPassError(true);
+        setCurrentPasswordError("Password does not match");
       }
-      if (currentPasswordRef.current.value <= 0) {
-        setFieldError("Please enter your current password");
+      if (currentPasswordRef.current.value < 0) {
+        // setFieldError("Please enter your current password");
+        setCPassError(true);
+        setCurrentPasswordError("Please enter your current password");
       }
       setIsAuthenticated(false);
-      setCurrentPasswordError(true);
+      setCPassError(true);
+      // setCurrentPasswordError("Please enter your current password");
     }
   };
 
@@ -257,9 +265,9 @@ function ProfileDetails() {
     console.log(currentPasswordRef);
     try {
       await reauthenticate(currentPasswordRef.current.value);
-      setCurrentPasswordError(false);
+      // setCPassError(false);
     } catch (error) {
-      setCurrentPasswordError(true);
+      // setCPassError(true);
       console.log(error);
     }
     console.log(currentPasswordRef.current.value);
@@ -282,296 +290,337 @@ function ProfileDetails() {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "center",
+        // justifyContent: "center",
         backgroundColor: "primary.main",
-        p: "40px"
+        width: "100%",
+        bgcolor: "primary.main"
       }}>
       <AccountMenu />
 
-      {/* PUT LEFT SIDE MENU WITH FAVORITES AND PLAYLISTS */}
+      <UserDrawer />
+
+      <Box
+        sx={{
+          height: "max-content",
+          textAlign: "center",
+          ml: { xs: 0, md: "220px" },
+          mt: 3,
+          pb: 3
+        }}>
+        <Typography
+          variant="h4"
+          sx={{
+            // width: "fit-content",
+            pb: 3
+            // textAlign: "center",
+            // ml: { xs: 0, md: "220px" },
+            // position: "relative"
+          }}>
+          Account Details
+        </Typography>
+
+        {fieldError && (
+          <Typography
+            variant="h5"
+            sx={{
+              // ml: { xs: 0, md: "220px" },
+              // width: { xs: 0, md: "calc(100% - 220px)" },
+              display: "flex",
+              // justifyContent: "center",
+              color: "accent.main"
+            }}>
+            {fieldError}
+          </Typography>
+        )}
+      </Box>
+
+      {/* <Typography
+        variant="h4"
+        sx={{ pb: 3, textAlign: "center", ml: { xs: 0, md: "220px" } }}>
+        Account Details
+      </Typography>
+
+      {fieldError && (
+        <Typography
+          variant="h5"
+          sx={{
+            // width: { xs: 0, md: "calc(100% - 220px)" },
+            display: "flex",
+            justifyContent: "center",
+            color: "accent.main",
+            position: "absolute",
+            top: 0,
+            left: "50%",
+            transform: "translate(-50%, 50%)"
+          }}>
+          {fieldError}
+        </Typography>
+      )} */}
 
       <Box
         sx={{
           backgroundColor: "primary.main",
           display: "flex",
-          flexDirection: "column",
-
-          // height: "100%",
-          width: "50%"
-          // borderRadius: "4px",
-          // border: "3px solid",
-          // borderColor: "accent.main",
-          // p: "20px",
-          // m: "60px"
+          // alignItems: "center",
+          justifyContent: "space-evenly",
+          // flexDirection: "column",
+          ml: { xs: 0, md: "220px" },
+          pt: 4,
+          height: "max-content",
+          alignItems: "flex-start",
+          // width: "100%",
+          // width: { xs: "80%", md: "60%" }
+          width: { xs: "100%", md: "calc(100% - 220px)" }
         }}>
-        <Typography
-          variant="h4"
-          align="center"
-          // color="accent.main"
-          paddingBottom="30px">
-          Account Details
-        </Typography>
-        <UploadProfilePhoto />
+        {/* <Box sx={{ height: "max-content", display: "flex" }}>
+          <Divider
+            orientation="vertical"
+            sx={{
+              display: "flex",
+              flex: 1,
+              backgroundColor: "#fff",
+              // borderColor: "accent.light",
+              // borderWidth: "1px",
+              // height: "100%"
+            }}
+          />
+        </Box> */}
 
-        <Typography
-          variant="caption"
+        <Box
           sx={{
-            width: "100%",
             display: "flex",
-            justifyContent: "center",
-            color: "accent.main"
+            gap: "40px",
+            // alignItems: "center",
+            width: "fit-content",
+            height: "100%"
+            // border: (theme) => `1px solid ${theme.palette.accent.main}`,
+            // borderRadius: 1,
+            // bgcolor: "accent.light",
+            // flex: 1
+            // color: "accent.dark"
           }}>
-          {fieldError}
-        </Typography>
-
-        <Box component="form" onSubmit={submitProfileDetails}>
-          <Box
-            sx={{
-              display: "flex",
-              width: "100%",
-              gap: "30px",
-              paddingBottom: "20px"
-            }}>
-            <Box sx={{ display: "flex", flexDirection: "column", flex: "1" }}>
-              <Typography
-                variant="subtitle2"
-                color={formik.errors.name ? "error" : "accent.main"}>
-                Name
-              </Typography>
-              <StyledTextField
-                required
-                disabled={!updateDetails}
-                error={formik.errors.name}
-                formik={formik}
-                name="name"
-                type="text"
-                defaultValue={formik.values.name}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                // sx={{
-                //   "& .MuiOutlinedInput-root.Mui-disabled": {
-                //     input: {
-                //       color: "accent.disabled !important"
-                //     },
-                //     fieldset: {
-                //       borderColor: "accent.disabled !important",
-                //       border: "2px solid"
-                //     },
-                //     "&:hover fieldset": {
-                //       borderColor: "accent.disabled !important",
-                //       border: "2px solid"
-                //     }
-                //   }
-                // }}
-              />
-            </Box>
-
-            <Box sx={{ display: "flex", flexDirection: "column", flex: "1" }}>
-              <Typography
-                variant="subtitle2"
-                color={
-                  formik.touched.email && formik.errors.email
-                    ? "error"
-                    : "accent.main"
-                }>
-                Email
-              </Typography>
-              <TextField
-                fullWidth
-                disabled={!updateDetails}
-                error={formik.errors.email}
-                variant="outlined"
-                // label="Email"
-                type="email"
-                name="email"
-                defaultValue={formik.values.email}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                // sx={{
-                //   "& .MuiOutlinedInput-root.Mui-disabled": {
-                //     input: {
-                //       color: "yellow !important"
-                //     },
-                //     fieldset: {
-                //       borderColor: "accent.disabled !important",
-                //       border: "2px solid"
-                //     },
-                //     "&:hover fieldset": {
-                //       borderColor: "accent.disabled !important",
-                //       border: "2px solid"
-                //     }
-                //   }
-                // }}
-              />
-            </Box>
-          </Box>
-          {/* <Typography variant="caption">{fieldError}</Typography> */}
-
-          <Box sx={{ display: "flex" }}>
-            <Button
-              fullWidth
-              // type="submit"
-              disabled={
-                formik.errors.name || formik.errors.email ? true : false
-              }
-              variant="contained"
-              sx={
-                {
-                  // color: "primary.main",
-                  // backgroundColor: "accent.main",
-                  // "&:hover": {
-                  //   backgroundColor: "accent.dark",
-                  //   boxShadow: "none"
-                  // },
-                  // "&.Mui-disabled": {
-                  //   backgroundColor: "accent.dark",
-                  //   boxShadow: "none"
-                  // }
-                }
-              }
-              onClick={() => {
-                updateDetails && submitProfileDetails(formik.values);
-                setUpdateDetails((prevState) => !prevState);
-              }}>
-              {updateDetails ? "Done" : "Edit Details"}
-            </Button>
-            {/* <Typography variant="caption">{fieldError}</Typography> */}
-          </Box>
+          <Divider orientation="vertical" variant="middle" flexItem />
+          <UploadProfilePhoto />
         </Box>
-        <Button
-          variant="contained"
-          type="button"
-          sx={{
-            mt: "20px",
-            width: "100%",
-            // border: "2px solid",
-            // borderColor: "primary.main",
-            border: "none",
-            backgroundColor: "accent.main",
-            color: "primary.main",
-            "&:hover": {
-              backgroundColor: "accent.dark"
-              // opacity: "0.9"
-            }
-          }}
-          onClick={handleResetClick}>
-          {isResetting ? "Cancel Reset Password" : "Reset Password"}
-        </Button>
 
-        {isResetting && (
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: "40px"
-              // width: "100%"
-              // justifyContent: "space-evenly"
-            }}>
-            <Box
-              component="form"
-              onSubmit={handleSubmit}
-              sx={{
-                pt: "20px",
-                width: "100%",
-                display: "flex",
-                flexDirection: "column",
-                // justifyContent: "flex-start",
-                gap: "10px"
-              }}>
+        <Box
+          sx={{
+            display: "flex",
+            gap: "40px",
+            // alignItems: "center",
+            width: "fit-content",
+            height: "100%"
+            // border: (theme) => `1px solid ${theme.palette.accent.main}`,
+            // borderRadius: 1,
+            // bgcolor: "accent.light",
+            // flex: 1
+            // color: "accent.dark"
+          }}>
+          <Divider orientation="vertical" variant="middle" flexItem />
+          <Box component="form" onSubmit={submitProfileDetails}>
+            <Box sx={{ display: "flex" }}>
+              <Button
+                fullWidth
+                disabled={
+                  formik.errors.name || formik.errors.email ? true : false
+                }
+                variant="contained"
+                onClick={() => {
+                  updateDetails && submitProfileDetails(formik.values);
+                  setUpdateDetails((prevState) => !prevState);
+                }}>
+                {updateDetails ? "Done" : "Edit Details"}
+              </Button>
+              {/* <Typography variant="caption">{fieldError}</Typography> */}
+            </Box>
+
+            {updateDetails && (
               <Box
                 sx={{
                   display: "flex",
                   flexDirection: "column",
-                  justifyContent: "flex-start",
-                  gap: "10px",
-                  width: "100%"
+                  width: "100%",
+                  gap: "30px",
+                  paddingBottom: "20px"
                 }}>
-                <Typography variant="subtitle2" color="accent.main">
-                  Enter current password
-                </Typography>
-                <TextField
-                  disabled={isAuthenticated}
-                  // sx={{
-                  //   width: "100%",
-                  //   "& .MuiOutlinedInput-root.Mui-disabled": {
-                  //     input: {
-                  //       color: "accent.disabled !important"
-                  //     },
-                  //     fieldset: {
-                  //       borderColor: "accent.disabled !important",
-                  //       border: "2px solid"
-                  //     },
-                  //     "&:hover fieldset": {
-                  //       borderColor: "accent.disabled !important",
-                  //       border: "2px solid"
-                  //     }
-                  //   }
-                  // }}
-                  // sx={{
-                  // width: "100%",
-                  //   "& .MuiOutlinedInput-root.Mui-disabled": {
-                  //     fieldset: {
-                  //       borderColor: "accent.disabled !important",
-                  //       border: "2px solid"
-                  //     },
-                  //     "& .MuiSvgIcon-root": {
-                  //       color: "accent.disabled !important",
-                  //       "&.Mui-focused": {
-                  //         color: "accent.disabled !important"
-                  //       }
-                  //     }
-                  //   }
-                  // }}
-                  placeholder="Current password"
-                  size="small"
-                  inputRef={currentPasswordRef}
-                  variant="outlined"
-                  type={currentPassVisible ? "text" : "password"}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment
-                        position="end"
-                        onClick={showCurrentPasswordClick}>
-                        {currentPassVisible ? (
-                          <Visibility />
-                        ) : (
-                          <VisibilityOff />
-                        )}
-                      </InputAdornment>
-                    )
-                  }}
-                />
+                <Box
+                  sx={{ display: "flex", flexDirection: "column", flex: "1" }}>
+                  <Typography
+                    variant="subtitle2"
+                    color={formik.errors.name ? "error.main" : "accent.main"}>
+                    Name
+                  </Typography>
+                  <TextField
+                    size="small"
+                    formik={formik}
+                    required
+                    disabled={!updateDetails}
+                    error={formik.touched.name && formik.errors.name}
+                    name="name"
+                    defaultValue={formik.values.name}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                </Box>
 
-                {/* <Box>
-                  {fieldError ? <Box color="error.main">{fieldError}</Box> : ""}
-                </Box> */}
+                <Box
+                  sx={{ display: "flex", flexDirection: "column", flex: "1" }}>
+                  <Typography
+                    variant="subtitle2"
+                    color={
+                      formik.touched.email && formik.errors.email
+                        ? "error.main"
+                        : "accent.main"
+                    }>
+                    Email
+                  </Typography>
+                  <TextField
+                    size="small"
+                    fullWidth
+                    disabled={!updateDetails}
+                    error={formik.touched.email && formik.errors.email}
+                    variant="outlined"
+                    type="email"
+                    name="email"
+                    defaultValue={formik.values.email}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                </Box>
               </Box>
-
-              <Button
-                disabled={isAuthenticated}
-                onClick={handleSubmit}
-                // variant="outlined"
-                type="submit"
-                component="label"
-                sx={{
-                  // color: "primary.main",
-                  // backgroundColor: "accent.main",
-                  backgroundColor: "transparent",
-                  color: "accent.main",
-                  // "&.Mui-disabled": {
-                  //   color: "accent.dark"
-                  // },
-                  "&:hover": {
-                    backgroundColor: "accent.dark",
-                    boxShadow: "none"
-                  }
-                }}>
-                Submit
-              </Button>
-            </Box>
-            {isAuthenticated && <ResetPassword />}
+            )}
+            {/* <Typography variant="caption">{fieldError}</Typography> */}
           </Box>
-        )}
+        </Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            gap: "40px",
+            // alignItems: "center",
+            width: "fit-content",
+            height: "100%"
+            // border: (theme) => `1px solid ${theme.palette.accent.main}`,
+            // borderRadius: 1,
+            // bgcolor: "accent.light",
+            // flex: 1
+            // color: "accent.dark"
+          }}>
+          <Divider orientation="vertical" variant="middle" flexItem />
+
+          <Box>
+            <Button
+              variant="contained"
+              sx={{
+                mt: "20px",
+                height: "fit-content"
+              }}
+              onClick={handleResetClick}>
+              {isResetting ? "Cancel Reset Password" : "Reset Password"}
+            </Button>
+
+            {isResetting && (
+              <Box
+                sx={
+                  {
+                    // display: "flex",
+                    // gap: "40px"
+                  }
+                }>
+                <Box
+                  component="form"
+                  onSubmit={handleSubmit}
+                  sx={{
+                    pt: "20px",
+                    width: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "10px"
+                  }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "flex-start",
+                      gap: "10px",
+                      width: "100%"
+                    }}>
+                    <Typography
+                      variant="subtitle2"
+                      color={cPassError ? "error.main" : "accent.main"}>
+                      Enter current password
+                    </Typography>
+                    <TextField
+                      disabled={isAuthenticated}
+                      error={cPassError}
+                      placeholder="Current password"
+                      size="small"
+                      inputRef={currentPasswordRef}
+                      variant="outlined"
+                      type={currentPassVisible ? "text" : "password"}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment
+                            position="end"
+                            onClick={showCurrentPasswordClick}>
+                            {currentPassVisible ? (
+                              <Visibility />
+                            ) : (
+                              <VisibilityOff />
+                            )}
+                          </InputAdornment>
+                        )
+                      }}
+                    />
+
+                    {/* <Box> */}
+                    {cPassError && (
+                      <Typography
+                        variant="caption"
+                        sx={{
+                          display: "flex",
+                          gap: "5px",
+                          color: "error.main"
+                        }}>
+                        <ErrorOutline sx={{ height: "16px", width: "16px" }} />
+                        {currentPasswordError}
+                      </Typography>
+                    )}
+                    {/* </Box> */}
+
+                    {/* <Box>
+                  {cPassError ? (
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "5px",
+                        height: "min-content",
+                        color: "error.main"
+                      }}>
+                      <ErrorOutline sx={{ height: "16px", width: "16px" }} />
+                      {cPassError}
+                    </Typography>
+                  ) : (
+                    ""
+                  )}
+                </Box> */}
+                  </Box>
+
+                  <Button
+                    disabled={isAuthenticated}
+                    onClick={handleSubmit}
+                    type="submit"
+                    component="label">
+                    Submit
+                  </Button>
+                </Box>
+                {isAuthenticated && <ResetPassword />}
+              </Box>
+            )}
+          </Box>
+        </Box>
       </Box>
     </Container>
   );

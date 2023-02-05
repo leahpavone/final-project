@@ -1,35 +1,36 @@
 import { createContext, useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../utilities/firebase";
+import { PageSpinner } from "../components/Spinners";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [pending, setPending] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
     onAuthStateChanged(auth, (currentUser) => {
-      setPending(true);
+      setLoading(true);
       setCurrentUser(auth.currentUser);
-      setPending(false);
+      setLoading(false);
       // console.log(auth.currentUser);
     });
   }, []);
 
-  if (pending) {
-    return <div>Loading...</div>;
+  if (loading) {
+    return <PageSpinner />;
   }
 
   return (
     <AuthContext.Provider
       value={{
-        pending,
+        loading,
         currentUser,
         loggedIn,
         setLoggedIn,
-        setPending,
+        setLoading,
         setCurrentUser
       }}>
       {children}

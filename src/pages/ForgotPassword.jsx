@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import { auth } from "../utilities/firebase";
 import { sendPasswordResetEmail } from "firebase/auth";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { Box, Button, Container, TextField, Typography } from "@mui/material";
+import { PageSpinner } from "../components/Spinners";
+import AccountMenu from "../components/AccountMenu";
 
 function ForgotPassword() {
+  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [emailSent, setEmailSent] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [fieldError, setFieldError] = useState("");
 
   const navigate = useNavigate();
@@ -40,6 +43,7 @@ function ForgotPassword() {
       setEmailSent(false);
       console.log(error);
     }
+    return console.log("done");
   };
 
   useEffect(() => {
@@ -49,27 +53,74 @@ function ForgotPassword() {
   }, [navigate]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <PageSpinner />;
   }
 
   return (
-    <div className="page forgot-password-page">
-      <Link to="/sign-in" className="link" />
-      <h2>Get a reset link</h2>
+    <Container
+      maxWidth="100vw"
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        backgroundColor: "primary.main"
+      }}>
+      <AccountMenu />
+      <Typography variant="h4" sx={{ p: 2 }}>
+        Reset your password
+      </Typography>
       {emailSent && (
-        <div>
-          Email sent! Please follow the instructions contained in the email{" "}
-        </div>
+        <Typography variant="h5" color="error.main">
+          Email sent! Please follow the instructions contained in the email.
+        </Typography>
       )}
-      <form onSubmit={handleSubmit}>
-        <h3>Please enter your email:</h3>
-        <input type="text" onChange={handleChange} required />
-        <button className="btn" type="submit">
-          Submit
-        </button>
-        {fieldError ? <div className="error-msg">{fieldError}</div> : ""}
-      </form>
-    </div>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          width: "100%",
+          height: "100%",
+          gap: "10px"
+        }}>
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            width: "40%",
+            pt: "30px",
+            height: "100%",
+            gap: "10px"
+          }}>
+          <Typography variant="subtitle2">Please enter your email:</Typography>
+          <TextField
+            variant="outlined"
+            placeholder="Enter your email"
+            type="text"
+            onChange={handleChange}
+            required
+          />
+          <Button
+            type="submit"
+            variant="text"
+            sx={{
+              width: "fit-content",
+              height: "fit-content",
+              p: 0
+            }}>
+            Submit
+          </Button>
+          {fieldError ? (
+            <Box sx={{ color: "error.main" }}>{fieldError}</Box>
+          ) : (
+            ""
+          )}
+        </Box>
+      </Box>
+    </Container>
   );
 }
 

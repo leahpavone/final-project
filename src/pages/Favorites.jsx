@@ -1,17 +1,17 @@
-import { Link } from "react-router-dom";
-import { Box, Container, Typography, Paper, Button } from "@mui/material";
-import AccountMenu from "../components/AccountMenu";
-import { useState, useEffect, useContext } from "react";
-import UserContext from "../context/UserContext";
-import AuthContext from "../context/AuthContext";
+import { Box, Button, Container, Typography } from "@mui/material";
 import UserDrawer from "../components/UserDrawer";
-import NoUserDrawer from "../components/NoUserDrawer";
+import { Link } from "react-router-dom";
+import AccountMenu from "../components/AccountMenu";
+import AuthContext from "../context/AuthContext";
+import UserContext from "../context/UserContext";
+import { useState, useEffect, useContext } from "react";
 import { PageSpinner } from "../components/Spinners";
 
-const Home = () => {
+const Favorites = () => {
   const [loading, setLoading] = useState(false);
+
+  const { currentUser } = useContext(AuthContext);
   const { user } = useContext(UserContext);
-  const { currentUser } = useContext(AuthContext); // only for account menu
 
   if (loading) {
     return <PageSpinner />;
@@ -22,7 +22,6 @@ const Home = () => {
       maxWidth="100vw"
       sx={{
         height: "100vh",
-        width: "100%",
         display: "flex",
         flexDirection: "column",
         bgcolor: "primary.main"
@@ -35,11 +34,11 @@ const Home = () => {
           textAlign: "center"
         }}>
         <Typography variant="h4" sx={{ p: 3 }}>
-          listen to your favorite music
+          Favorites
         </Typography>
       </Container>
     </Container>
   );
 };
 
-export default Home;
+export default Favorites;

@@ -1,17 +1,15 @@
-import { Link } from "react-router-dom";
-import { Box, Container, Typography, Paper, Button } from "@mui/material";
-import AccountMenu from "../components/AccountMenu";
-import { useState, useEffect, useContext } from "react";
-import UserContext from "../context/UserContext";
-import AuthContext from "../context/AuthContext";
+import { Box, Button, Container, Typography } from "@mui/material";
 import UserDrawer from "../components/UserDrawer";
-import NoUserDrawer from "../components/NoUserDrawer";
+import { Link } from "react-router-dom";
+import AccountMenu from "../components/AccountMenu";
+import AuthContext from "../context/AuthContext";
+import UserContext from "../context/UserContext";
+import { useState, useEffect, useContext } from "react";
 import { PageSpinner } from "../components/Spinners";
 
-const Home = () => {
+const Search = () => {
   const [loading, setLoading] = useState(false);
-  const { user } = useContext(UserContext);
-  const { currentUser } = useContext(AuthContext); // only for account menu
+  const { currentUser } = useContext(AuthContext);
 
   if (loading) {
     return <PageSpinner />;
@@ -22,10 +20,12 @@ const Home = () => {
       maxWidth="100vw"
       sx={{
         height: "100vh",
-        width: "100%",
         display: "flex",
         flexDirection: "column",
+        // textAlign: "center",
         bgcolor: "primary.main"
+        // height: "100vh",
+        // width: "100vw"
       }}>
       <UserDrawer />
       <AccountMenu />
@@ -35,11 +35,11 @@ const Home = () => {
           textAlign: "center"
         }}>
         <Typography variant="h4" sx={{ p: 3 }}>
-          listen to your favorite music
+          Search
         </Typography>
       </Container>
     </Container>
   );
 };
 
-export default Home;
+export default Search;

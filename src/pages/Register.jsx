@@ -17,23 +17,16 @@ import {
   TextField,
   Box,
   Grid,
-  Divider
+  Divider,
+  Container
 } from "@mui/material";
-import { styled } from "@mui/system";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
-import {
-  Visibility,
-  VisibilityOff,
-  Phone,
-  Error,
-  ErrorOutline
-} from "@mui/icons-material";
+import { Visibility, VisibilityOff, ErrorOutline } from "@mui/icons-material";
 import { registerFormSchema } from "../schemas";
 import { useFormik } from "formik";
 import InputField from "../components/InputField";
-import { StyledTextField } from "../components/InputField";
 
 const Register = () => {
   const [currentPassVisible, setCurrentPassVisible] = useState(false);
@@ -117,26 +110,27 @@ const Register = () => {
     validationSchema: registerFormSchema,
     onSubmit
   });
-  // console.log(formik);
 
   return (
-    <Box
+    <Container
+      maxWidth="100vw"
       sx={{
-        maxWidth: "100vw",
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "primary.main"
+        backgroundColor: "primary.main",
+        pt: 4,
+        pb: 4
       }}>
       <Box
         sx={{
           backgroundColor: "primary.main",
-          width: "50%",
+          width: { xs: "80%", md: "70%", lg: "60%" },
           height: "max-content",
           borderRadius: "4px",
-          p: 3,
+          // p: 3,
           display: "flex",
           flexDirection: "column"
         }}>
@@ -145,9 +139,11 @@ const Register = () => {
           sx={{
             color: "accent.main",
             textAlign: "center",
-            paddingBottom: "20px"
+            paddingBottom: "20px",
+            fontSize: { xs: "32px", lg: "48px" },
+            fontWeight: 600
           }}>
-          Sign Up
+          Create an Account
         </Typography>
 
         <Box
@@ -159,7 +155,7 @@ const Register = () => {
             gap: "24px"
           }}>
           <Grid container spacing={2}>
-            <Grid item xs={6}>
+            <Grid item xs={12} md={6}>
               <InputField
                 formik={formik}
                 name="name"
@@ -170,7 +166,7 @@ const Register = () => {
               />
             </Grid>
 
-            <Grid item xs={6}>
+            <Grid item xs={12} md={6}>
               <InputField
                 formik={formik}
                 name="email"
@@ -181,7 +177,7 @@ const Register = () => {
               />
             </Grid>
 
-            <Grid item xs={6}>
+            <Grid item xs={12} md={6}>
               <InputField
                 formik={formik}
                 name="phoneNumber"
@@ -192,7 +188,7 @@ const Register = () => {
               />
             </Grid>
 
-            <Grid item xs={6}>
+            <Grid item xs={12} md={6}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <Typography
                   variant="subtitle2"
@@ -206,70 +202,22 @@ const Register = () => {
                 <DatePicker
                   disableMaskedInput={false}
                   disableFuture={true}
-                  // minDate={dayjs("1900-01-01").format("MM/DD/YYYY")}
-                  // maxDate={dayjs().format("MM/DD/YYYY")}
                   value={userBirthday}
                   onChange={(e) => setUserBirthday(e)}
                   mask="__/__/____"
                   inputFormat="MM/DD/YYYY"
                   renderInput={(props) => (
-                    <>
-                      <StyledTextField
-                        {...props}
-                        size="small"
-                        placeholder="MM/DD/YYYY"
-                        name="birthday"
-                        value={formik.values.birthday}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        error={
-                          formik.touched.birthday && formik.errors.birthday
-                        }
-                      />
-                      {/* <TextField
-                    //   {...props}
-                    //   size="small"
-                    //   placeholder="MM/DD/YYYY"
-                    //   name="birthday"
-                    //   value={formik.values.birthday}
-                    //   onChange={formik.handleChange}
-                    //   error={formik.errors.birthday && formik.touched.birthday}
-                    //   sx={{
-                    //     display: "flex",
-                    //     flex: "1",
-                    //     "& .MuiOutlinedInput-root": {
-                    //       input: {
-                    //         color: "accent.dark"
-                    //       },
-                    //       "& ::placeholder": {
-                    //         color: "accent.light"
-                    //       },
-                    //       "& fieldset": {
-                    //         borderColor: "accent.main",
-                    //         borderWidth: "2px"
-                    //       },
-                    //       "&:hover:not(.Mui-error) fieldset ": {
-                    //         borderColor: "accent.dark",
-                    //         borderWidth: "2px"
-                    //       },
-                    //       "&.Mui-focused:not(.Mui-error) fieldset": {
-                    //         borderColor: "accent.dark",
-                    //         borderWidth: "2px"
-                    //       },
-                    //       "&.Mui-error fieldset": {
-                    //         borderColor: "error",
-                    //         borderWidth: "2.5px"
-                    //       }
-                    //     },
-                    //     "& .MuiSvgIcon-root": {
-                    //       color: "accent.main",
-                    //       "&.Mui-focused": {
-                    //         color: "accent.dark"
-                    //       }
-                    //     }
-                    //   }}
-                    // /> */}
-                    </>
+                    <TextField
+                      fullWidth
+                      {...props}
+                      size="small"
+                      placeholder="MM/DD/YYYY"
+                      name="birthday"
+                      value={formik.values.birthday}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      error={formik.touched.birthday && formik.errors.birthday}
+                    />
                   )}
                 />
               </LocalizationProvider>
@@ -291,7 +239,7 @@ const Register = () => {
               </Box>
             </Grid>
 
-            <Grid item xs={6}>
+            <Grid item xs={12} md={6}>
               <Typography
                 variant="subtitle2"
                 color={
@@ -302,21 +250,18 @@ const Register = () => {
                 Password
               </Typography>
 
-              <StyledTextField
+              <TextField
+                fullWidth
                 placeholder="Password"
                 size="small"
                 error={formik.errors.password && formik.touched.password}
-                // helperText={formik.touched.password && formik.errors.password}
-                // FormHelperTextProps={{ position: "absolute" }}
                 variant="outlined"
-                // label="Password"
                 name="password"
                 value={formik.values.password}
                 onChange={formik.handleChange}
                 onBlur={formik.onBlur}
                 type={currentPassVisible ? "text" : "password"}
                 InputProps={{
-                  // sx: {styles.textField},
                   endAdornment: (
                     <InputAdornment
                       position="end"
@@ -345,7 +290,7 @@ const Register = () => {
               </Box>
             </Grid>
 
-            <Grid item xs={6}>
+            <Grid item xs={12} md={6}>
               <Typography
                 variant="subtitle2"
                 color={
@@ -357,24 +302,21 @@ const Register = () => {
                 Confirm password
               </Typography>
 
-              <StyledTextField
+              <TextField
+                fullWidth
                 placeholder="Confirm password"
                 size="small"
                 error={
                   formik.errors.confirmPassword &&
                   formik.touched.confirmPassword
                 }
-                // helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
-                // FormHelperTextProps={{ position: "absolute" }}
                 variant="outlined"
-                // label="Password"
                 name="confirmPassword"
                 value={formik.values.confirmPassword}
                 onChange={formik.handleChange}
                 onBlur={formik.onBlur}
                 type={confirmPassVisible ? "text" : "password"}
                 InputProps={{
-                  // sx: {styles.textField},
                   endAdornment: (
                     <InputAdornment
                       position="end"
@@ -403,75 +345,6 @@ const Register = () => {
                     </Typography>
                   )}
               </Box>
-
-              {/* <TextField
-                placeholder="Confirm password"
-                sx={{
-                  display: "flex",
-                  flex: "1",
-                  "& .MuiOutlinedInput-root": {
-                    input: {
-                      color: "accent.dark"
-                    },
-                    "& fieldset": {
-                      borderColor: "accent.main",
-                      borderWidth: "2px"
-                    },
-                    "&:hover:not(.Mui-error) fieldset ": {
-                      borderColor: "accent.dark",
-                      borderWidth: "2px"
-                    },
-                    "&.Mui-focused:not(.Mui-error) fieldset": {
-                      borderColor: "accent.dark",
-                      borderWidth: "2px"
-                    },
-                    "&.Mui-error fieldset": {
-                      borderColor: "error",
-                      borderWidth: "2.5px"
-                    }
-                  },
-                  "& .MuiSvgIcon-root": {
-                    color: "accent.main",
-                    "&:hover": {
-                      cursor: "pointer"
-                    },
-                    "&.Mui-focused": {
-                      color: "accent.dark"
-                    }
-                  }
-                }}
-                size="small"
-                error={
-                  formik.errors.confirmPassword &&
-                  formik.touched.confirmPassword
-                }
-                variant="outlined"
-                name="confirmPassword"
-                value={formik.values.confirmPassword}
-                onChange={formik.handleChange}
-                onBlur={formik.onBlur}
-                type={confirmPassVisible ? "text" : "password"}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment
-                      position="end"
-                      onClick={showConfirmPasswordClick}>
-                      {confirmPassVisible ? <Visibility /> : <VisibilityOff />}
-                    </InputAdornment>
-                  )
-                }}
-              />
-              <Typography
-                variant="caption"
-                color={
-                  formik.touched.confirmPassword &&
-                  formik.errors.confirmPassword
-                    ? "error"
-                    : "accent.main"
-                }>
-                {formik.touched.confirmPassword &&
-                  formik.errors.confirmPassword}
-              </Typography> */}
             </Grid>
           </Grid>
 
@@ -497,17 +370,19 @@ const Register = () => {
             height: "100%",
             display: "flex",
             flexDirection: "column",
-            justifyContent: "space-evenly"
+            gap: "10px"
           }}>
           <Box sx={{ pt: "24px" }}>
             <Divider
               sx={{
-                color: "rgba(180, 184, 217, 0.4)",
+                color: "rgba(181, 155, 202, 0.5)",
+                width: "95%",
+                margin: "0 auto",
                 "&::before": {
-                  borderTop: "thin solid rgba(180, 184, 217, 0.4)"
+                  borderTop: "thin solid rgba(181, 155, 202, 0.5)"
                 },
                 "&::after": {
-                  borderTop: "thin solid rgba(180, 184, 217, 0.4)"
+                  borderTop: "thin solid rgba(181, 155, 202, 0.5)"
                 }
               }}>
               or
@@ -522,30 +397,23 @@ const Register = () => {
               flexDirection: "column",
               alignItems: "center"
             }}>
-            <Typography variant="p" sx={{ color: "rgba(180, 184, 217, 0.4)" }}>
+            <Typography
+              variant="subtitle1"
+              sx={{ color: "rgba(181, 155, 202, 0.7)" }}>
               Already have an account?
             </Typography>
             <Button
               component={Link}
               variant="text"
-              sx={{
-                backgroundColor: "transparent",
-                color: "accent.main",
-                width: "fit-content",
-                transition: "all 0.2s ease-in-out",
-                "&:hover": {
-                  backgroundColor: "transparent",
-                  textDecoration: "underline",
-                  transform: "scale(1.02)"
-                }
-              }}
+              sx={{ fontSize: "16px", letterSpacing: "1px", p: 0 }}
               to={"/login"}>
               Login
             </Button>
           </Box>
         </Box>
       </Box>
-    </Box>
+      {/* </Box> */}
+    </Container>
   );
 };
 

@@ -4,23 +4,17 @@ import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../utilities/firebase";
 import googleIcon from "../assets/googleIcon.svg";
 import dayjs from "dayjs";
-import {
-  Box,
-  TextField,
-  Typography,
-  Button,
-  InputAdornment,
-  FormHelperText,
-  Link,
-  Divider
-} from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
+import { useState } from "react";
 
 function OAuth() {
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
   const onGoogleClick = async () => {
     try {
+      setLoading(true);
       const auth = getAuth();
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
@@ -35,13 +29,6 @@ function OAuth() {
       const docSnap = await getDoc(docRef);
 
       // If user doesn't exist, create user
-      // if (!docSnap.exists()) {
-      //   await setDoc(doc(db, "users", user.uid), {
-      //     name: user.displayName,
-      //     email: user.email,
-      //     createdAt: new Date()
-      //   });
-      // }
       if (!docSnap.exists()) {
         await setDoc(doc(db, "users", user.uid), {
           uid: user.uid,
@@ -55,9 +42,11 @@ function OAuth() {
           createdAt: dayjs(new Date()).format("M/D/YYYY h:mm A"),
           updatedAt: dayjs().format("M/D/YYYY h:mm A")
         });
+        setLoading(false);
       }
       navigate("/dashboard");
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
@@ -76,29 +65,16 @@ function OAuth() {
         onClick={onGoogleClick}
         sx={{
           cursor: "pointer",
-          backgroundColor: "secondary.main",
+          backgroundColor: "#fff !important",
           boxShadow: "0 0 2px rgba(255,255,255, 0.4)",
-          // border: "2px solid",
-          // borderColor: "primary.dark",
-          // opacity: "0.8",
-          // width: "fit-content",
           p: 1,
           display: "flex",
           alignItems: "center",
-          gap: "6px",
-          borderRadius: "4px",
-          // border: "none",
-          // border: "2px solid",
-          // borderColor: "accent.veryDark",
+          gap: "10px",
           "&:hover": {
-            // border: "1px solid",
-            // borderColor: "primary",
-            // opacity: "0.5",
-            backgroundColor: "secondary.light",
-            // transform: "scaleX(1.01)",
-            // scale: "101%",
+            backgroundColor: "#f0ebf4 !important",
             transition: "all 0.2s ease",
-            boxShadow: "0 0 6px rgba(255,255,255, 0.3)"
+            boxShadow: "0 0 6px rgba(255,255,255, 0.5)"
           }
         }}>
         <img
@@ -111,7 +87,8 @@ function OAuth() {
           sx={{
             lineHeight: 1,
             letterSpacing: "1px",
-            fontSize: "14px"
+            fontSize: "14px",
+            color: "primary.main"
           }}>
           Sign {location.pathname === "/register" ? "up" : "in"} with Google
         </Typography>

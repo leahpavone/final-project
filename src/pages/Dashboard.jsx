@@ -5,38 +5,52 @@ import axios from "axios";
 import UserContext from "../context/UserContext";
 import { Button, Paper, Box, Typography, Container } from "@mui/material";
 import AccountMenu from "../components/AccountMenu";
+import AuthContext from "../context/AuthContext";
+import { PageSpinner } from "../components/Spinners";
+import UserDrawer from "../components/UserDrawer";
 
 const Dashboard = () => {
+  const { user } = useContext(UserContext);
+  const { currentUser } = useContext(AuthContext);
+
   const [loading, setLoading] = useState(false);
+  const [firstName, setFirstName] = useState("");
+
   const navigate = useNavigate();
 
-  const { user } = useContext(UserContext);
+  useEffect(() => {
+    if (user?.name.length > 0) {
+      const fN = user.name.split(" ")[0];
+      setFirstName(fN);
+      console.log(fN);
+    }
+  }, [user]);
+
+  if (loading) {
+    return <PageSpinner />;
+  }
 
   return (
     <Container
       maxWidth="100vw"
       sx={{
         height: "100vh",
+        width: "100%",
         display: "flex",
         flexDirection: "column",
-        // fullWidth,
-        // maxWidth: "100vw",
-        // maxWidth: "100vw",
-        // minHeight: "100vh",
-        // display: "flex",
-        // flexDirection: "column",
-        // alignItems: "center",
-        // justifyContent: "center",
-        backgroundColor: "primary.main"
+        bgcolor: "primary.main"
       }}>
+      <UserDrawer />
       <AccountMenu />
-
-      <h1>Dashboard</h1>
-      {user && (
-        <Typography variant="h2" sx={{ color: "accent.main" }}>
-          Hi, {user.name}
+      <Container
+        sx={{
+          textAlign: "center"
+          // ml: "220px"
+        }}>
+        <Typography variant="h4" sx={{ mt: 2 }}>
+          {firstName}'s Dashboard
         </Typography>
-      )}
+      </Container>
     </Container>
   );
 };

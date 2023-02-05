@@ -1,7 +1,6 @@
 import { useState, useContext, useEffect } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../utilities/firebase";
-
 import { useNavigate, Link } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
 import OAuth from "../components/OAuth";
@@ -11,13 +10,12 @@ import {
   Typography,
   Button,
   InputAdornment,
-  FormHelperText,
-  Divider
+  Divider,
+  Container
 } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { ErrorOutline, Visibility, VisibilityOff } from "@mui/icons-material";
 import { loginFormSchema } from "../schemas";
 import { useFormik } from "formik";
-import { CustomTextField } from "./Register";
 import { useTheme } from "@mui/system";
 import InputField from "../components/InputField";
 
@@ -78,35 +76,50 @@ const Login = () => {
   }, [user, navigate]);
 
   return (
-    <Box
+    <Container
+      maxWidth="100vw"
       sx={{
-        width: "100%",
-        height: "100vh",
+        minHeight: "100vh",
         display: "flex",
-        flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "primary.main"
+        backgroundColor: "primary.main",
+        pt: 4,
+        pb: 4
       }}>
       <Box
         sx={{
-          width: "50%",
+          width: { xs: "80%", md: "70%", lg: "60%" },
           backgroundColor: "primary.main",
-          borderRadius: "4px",
-          padding: 4
+          borderRadius: "4px"
+
+          // p: 3
         }}>
         <Typography
           variant="h4"
           sx={{
+            color: "accent.main",
             textAlign: "center",
             paddingBottom: "30px",
-            color: "accent.main"
+            fontSize: { xs: "32px", lg: "48px" },
+            fontWeight: 600
           }}>
           Login to your account
         </Typography>
 
         {fieldError ? (
-          <Box sx={{ color: theme.palette.error.main, textAlign: "center" }}>
+          <Box
+            sx={{
+              color: theme.palette.error.main,
+              fontSize: { xs: "16px", lg: "18px" },
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "5px",
+              letterSpacing: "1px",
+              fontWeight: "500"
+            }}>
+            <ErrorOutline sx={{ height: "18px", width: "18px" }} />
             {fieldError}
           </Box>
         ) : (
@@ -122,167 +135,150 @@ const Login = () => {
               height: "fit-content",
               gap: "10px"
             }}>
-            <InputField
-              formik={formik}
-              name="email"
-              label="Email"
-              type="text"
-              placeholder="Email"
-              value={formik.values.email}
-            />
-
-            <Typography
-              variant="subtitle2"
-              color={
-                formik.touched.password && formik.errors.password
-                  ? "error"
-                  : "accent.main"
-              }>
-              Password
-            </Typography>
-
-            <TextField
-              placeholder="Password"
+            <Box
               sx={{
                 display: "flex",
-                flex: "1",
-                "& .MuiOutlinedInput-root": {
-                  input: {
-                    color: "accent.dark"
-                  },
-                  "& fieldset": {
-                    borderColor: "accent.main",
-                    borderWidth: "2px"
-                  },
-                  "&:hover:not(.Mui-error) fieldset ": {
-                    borderColor: "accent.light",
-                    borderWidth: "2px"
-                  },
-                  "&.Mui-focused:not(.Mui-error) fieldset": {
-                    borderColor: "accent.light",
-                    borderWidth: "2px"
-                  },
-                  "&.Mui-error fieldset": {
-                    borderColor: "error",
-                    borderWidth: "2.5px"
-                  }
-                },
-                "& .MuiSvgIcon-root": {
-                  color: "accent.main",
-                  "&:hover": {
-                    cursor: "pointer"
-                  },
-                  "&.Mui-focused": {
-                    color: "accent.light"
-                  }
-                }
-              }}
-              size="small"
-              error={formik.errors.password && formik.touched.password}
-              variant="outlined"
-              name="password"
-              value={formik.values.password}
-              onChange={formik.handleChange}
-              onBlur={formik.onBlur}
-              type={currentPassVisible ? "text" : "password"}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment
-                    position="end"
-                    onClick={showCurrentPasswordClick}>
-                    {currentPassVisible ? <Visibility /> : <VisibilityOff />}
-                  </InputAdornment>
-                )
-              }}
-            />
-
-            <Typography
-              variant="caption"
-              color={
-                formik.touched.password && formik.errors.password
-                  ? "error"
-                  : "accent.main"
-              }>
-              {formik.touched.password && formik.errors.password}
-            </Typography>
-
-            <Button
-              disableRipple
-              // variant="contained"
-              type="submit"
-              disabled={formik.isSubmitting}
-              sx={{
-                color: "primary.main",
-                backgroundColor: "accent.main",
-                boxShadow: "none",
-                marginTop: "20px",
-                "&:hover": {
-                  backgroundColor: "accent.dark"
-                }
+                flexDirection: { xs: "column", lg: "row" },
+                gap: { xs: "10px", lg: "20px" }
               }}>
-              Submit
-            </Button>
-            <Button
-              variant="text"
-              sx={{
-                backgroundColor: "transparent",
-                color: "primary.main",
-                width: "fit-content",
-                "&:hover": {
-                  backgroundColor: "transparent",
-                  textDecoration: "underline"
-                }
-              }}
-              to={"/forgot-password"}>
-              Forgot Password?
-            </Button>
-          </Box>
+              <Box width="100%">
+                <InputField
+                  formik={formik}
+                  name="email"
+                  label="Email"
+                  type="text"
+                  placeholder="Email"
+                  value={formik.values.email}
+                />
+              </Box>
 
-          <Box sx={{}}>
-            <Divider
-              sx={{
-                color: "rgba(180, 184, 217, 0.4)",
-                "&::before": {
-                  borderTop: "thin solid rgba(180, 184, 217, 0.4)"
-                },
-                "&::after": {
-                  borderTop: "thin solid rgba(180, 184, 217, 0.4)"
-                }
-              }}>
-              or
-            </Divider>
-          </Box>
+              <Box width="100%">
+                <Typography
+                  variant="subtitle2"
+                  color={
+                    formik.touched.password && formik.errors.password
+                      ? "error"
+                      : "accent.main"
+                  }>
+                  Password
+                </Typography>
 
-          <OAuth />
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center"
-            }}>
-            <Typography variant="p" sx={{ color: "rgba(180, 184, 217, 0.4)" }}>
-              Don't have an account yet?
-            </Typography>
+                <TextField
+                  fullWidth
+                  placeholder="Password"
+                  size="small"
+                  error={formik.errors.password && formik.touched.password}
+                  variant="outlined"
+                  name="password"
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                  onBlur={formik.onBlur}
+                  type={currentPassVisible ? "text" : "password"}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment
+                        position="end"
+                        onClick={showCurrentPasswordClick}>
+                        {currentPassVisible ? (
+                          <Visibility />
+                        ) : (
+                          <VisibilityOff />
+                        )}
+                      </InputAdornment>
+                    )
+                  }}
+                />
+
+                {formik.touched.password && formik.errors.password && (
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "5px",
+                      height: "min-content",
+                      color: "error.main"
+                    }}>
+                    <ErrorOutline sx={{ height: "16px", width: "16px" }} />
+                    {formik.touched.password && formik.errors.password}
+                  </Typography>
+                )}
+              </Box>
+            </Box>
+
             <Button
               component={Link}
               variant="text"
               sx={{
-                backgroundColor: "transparent",
-                color: "accent.main",
                 width: "fit-content",
-                fontStyle: "normal",
-                "&:hover": {
-                  backgroundColor: "transparent",
-                  textDecoration: "underline"
-                }
+                height: "fit-content",
+                p: 0,
+                mt: "-5px"
               }}
-              to={"/register"}>
-              Create an account
+              to={"/forgot-password"}>
+              Forgot Password?
             </Button>
+            <Button
+              disableRipple
+              variant="contained"
+              type="submit"
+              disabled={formik.isSubmitting}
+              sx={{
+                marginTop: "20px"
+              }}>
+              Submit
+            </Button>
+          </Box>
+
+          <Box
+            sx={{
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              gap: "10px"
+            }}>
+            <Box sx={{ pt: "24px" }}>
+              <Divider
+                sx={{
+                  color: "rgba(181, 155, 202, 0.5)",
+                  width: "95%",
+                  margin: "0 auto",
+                  "&::before": {
+                    borderTop: "thin solid rgba(181, 155, 202, 0.5)"
+                  },
+                  "&::after": {
+                    borderTop: "thin solid rgba(181, 155, 202, 0.5)"
+                  }
+                }}>
+                or
+              </Divider>
+            </Box>
+
+            <OAuth />
+
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center"
+              }}>
+              <Typography
+                variant="subtitle1"
+                sx={{ color: "rgba(181, 155, 202, 0.7)" }}>
+                Don't have an account yet?
+              </Typography>
+              <Button
+                component={Link}
+                variant="text"
+                sx={{ fontSize: "16px", letterSpacing: "1px", p: 0 }}
+                to={"/register"}>
+                Create an account
+              </Button>
+            </Box>
           </Box>
         </Box>
       </Box>
-    </Box>
+    </Container>
   );
 };
 

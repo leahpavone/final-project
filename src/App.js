@@ -1,5 +1,4 @@
 import { AuthProvider } from "./context/AuthContext";
-// import { LocalizationProvider } from "@mui/x-date-pickers";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute";
 import Home from "./pages/Home";
@@ -12,6 +11,9 @@ import ProfileDetails from "./pages/ProfileDetails";
 import { UserProvider } from "./context/UserContext";
 import { CssBaseline } from "@mui/material";
 import { purple, blueGrey } from "@mui/material/colors";
+import Search from "./pages/Search";
+import Favorites from "./pages/Favorites";
+import Playlists from "./pages/Playlists";
 
 function App() {
   const theme = createTheme({
@@ -24,19 +26,25 @@ function App() {
       primary: {
         main: "#1a1a1a",
         dark: "#171717",
-        light: "#313131"
+        light: "#313131",
+        darkest: "#121212"
       },
-      secondary: {
-        main: "#faf9f6",
-        dark: "#c8c7c5",
-        light: "#ffffff"
-      },
+      // secondary: {
+      //   main: "#faf9f6",
+      //   dark: "#c8c7c5",
+      //   light: "#ffffff"
+      // },
       accent: {
         main: "#b59bca",
         dark: "#917ca2",
         light: "#c4afd5",
-        disabled: "#5b4e65"
+        disabled: "#5b4e65",
+        active: "#362e3d"
       },
+      divider: {
+        main: "#fff"
+      },
+
       error: {
         main: "#fff"
       },
@@ -45,20 +53,20 @@ function App() {
       }
     },
     typography: {
-      // color: "#B59BCA",
-      h3: {
-        color: "#B59BCA",
+      color: "#b59bca",
+      h4: {
         fontWeight: 700,
-        fontSize: "64px"
+        fontSize: "36px"
+      },
+      h3: {
+        fontWeight: 700,
+        fontSize: "50px"
       },
       h2: {
-        color: "accent.main",
-        fontWeight: 500,
-        fontSize: "2.5rem"
+        fontWeight: 600,
+        fontSize: "64px"
       },
       p: {
-        color: "accent.main",
-        // fontWeight: 500,
         fontSize: "14px"
       }
     },
@@ -72,15 +80,12 @@ function App() {
             }
           },
           "&.MuiInputBase-root": {
+            borderRadius: "4px",
             "&.MuiOutlinedInput-root": {
-              display: "flex",
-              flex: 1,
+              // display: "flex",
+              // flex: 1,
               input: {
                 color: "#917ca2"
-              },
-              "&.Mui-disabled": {
-                borderColor: "#5b4e65",
-                border: "2px solid"
               },
               "& fieldset": {
                 borderColor: "#b59bca",
@@ -97,6 +102,10 @@ function App() {
               "&.Mui-error fieldset": {
                 borderColor: "#fff",
                 borderWidth: "2.5px"
+              },
+              "&.Mui-disabled fieldset": {
+                borderColor: "#5b4e65",
+                border: "2px solid"
               }
             },
             "& .MuiSvgIcon-root": {
@@ -111,6 +120,7 @@ function App() {
             }
           },
           "& .MuiButtonBase-root": {
+            borderRadius: "4px",
             "&.MuiButton-contained": {
               color: "#1a1a1a",
               backgroundColor: "#b59bca",
@@ -120,6 +130,16 @@ function App() {
               },
               "&.Mui-disabled": {
                 backgroundColor: "#5b4e65"
+              }
+            },
+            ".css-l8tig1-MuiButtonBase-root-MuiButton-root": {
+              color: "#b59bca",
+              boxShadow: "none !important",
+              // height: "30px",
+              // width: "250px",
+              backgroundColor: "transparent",
+              "&:hover": {
+                color: "#5b4e65 !important"
               }
             },
             "&.MuiButton-outlined": {
@@ -141,11 +161,13 @@ function App() {
               }
             },
             "&.MuiButton-text": {
+              disableRipple: true,
+              width: "fit-content",
               color: "#b59bca",
               backgroundColor: "transparent",
               "&:hover": {
                 backgroundColor: "transparent",
-
+                textDecoration: "underline",
                 color: "#917ca2",
                 boxShadow: "none"
               },
@@ -159,8 +181,13 @@ function App() {
     }
   });
 
+  // extra small, xs: 0px
+  // small, sm: 600px
+  // medium, md: 900px
+  // large, lg: 1200px
+  // extra large, xl: 1536px
+
   return (
-    // <>
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <AuthProvider>
@@ -177,139 +204,21 @@ function App() {
               <Route path="/profile-details" element={<PrivateRoute />}>
                 <Route path="/profile-details" element={<ProfileDetails />} />
               </Route>
+              {/* <Route path="/search" element={<PrivateRoute />}> */}
+              <Route path="/search" element={<Search />} />
+              {/* </Route> */}
+              <Route path="/favorites" element={<PrivateRoute />}>
+                <Route path="/favorites" element={<Favorites />} />
+              </Route>
+              <Route path="/playlists" element={<PrivateRoute />}>
+                <Route path="/playlists" element={<Playlists />} />
+              </Route>
             </Routes>
           </Router>
         </UserProvider>
       </AuthProvider>
     </ThemeProvider>
-    // {/* </> */}
   );
 }
 
 export default App;
-
-// #1f1e1e - dark
-// #e1dfd3 - light
-// #5a8077 - accent
-// #6b8d85 - accentLight
-// #7b9992 - accentLightest
-// #51736b - accentDark
-// #48665f - accentDarkest
-
-// #272727 = dark
-// #ffeedb = light
-// #759FBC = accent - light blue
-// #959b6e - olive green
-// #81b0b2 - light blue
-// #76b78b - light green
-// #282724 - darkdark grey
-// #fffbf2 - white
-// #fffdfa - cream white
-// #b3a8d5 - purple
-
-// #fafafa - white
-// #9B6F90 - purple accent
-//
-
-// {
-//   /* <Box
-//         sx={{
-//           width: 30,
-//           height: 30,
-//           backgroundColor: "accent.main",
-//           "&:hover": {
-//             backgroundColor: "primary.main",
-//             opacity: [0.9, 0.8, 0.7]
-//           }
-//         }}
-//       /> */
-// }
-
-// const theme = createTheme({
-//   palette: {
-//     background: {
-//       main: "#302f2e"
-//     },
-//     text: {
-//       primary: "#faf9f6",
-//       secondary: "#e1e0dd"
-//     },
-//     accent: {
-//       main: "#b4b8d9"
-//     }
-//   },
-//   overrides: {
-//     MuiAppBar: {
-//       colorPrimary: {
-//         backgroundColor: "background.main",
-//         color: "text.primary"
-//       }
-//     },
-//     MuiButton: {
-//       root: {
-//         backgroundColor: "accent.main",
-//         color: "text.primary",
-//         "&:hover": {
-//           backgroundColor: "accent.dark"
-//         }
-//       }
-//     },
-//     MuiTypography: {
-//       h1: {
-//         color: "text.primary",
-//         fontWeight: 600,
-//         fontSize: "3rem"
-//       },
-//       h2: {
-//         color: "text.secondary",
-//         fontWeight: 500,
-//         fontSize: "2.5rem"
-//       }
-//     }
-//   }
-// });
-
-// const theme = createTheme({
-//   palette: {
-//     background: {
-//       main: "#F5F5F5"
-//     },
-//     text: {
-//       primary: "#333333",
-//       secondary: "#757575"
-//     },
-//     accent: {
-//       main: "#3f51b5"
-//     }
-//   },
-//   overrides: {
-//     MuiCssBaseline: {
-//       "@global": {
-//         body: {
-//           backgroundColor: "#F5F5F5"
-//         }
-//       }
-//     },
-//     MuiTypography: {
-//       fontFamily: "Roboto",
-//       h1: {
-//         color: "#333333"
-//       },
-//       h2: {
-//         color: "#333333"
-//       },
-//       body1: {
-//         color: "#757575"
-//       }
-//     },
-//     MuiButton: {
-//       root: {
-//         backgroundColor: "#3f51b5",
-//         color: "#fff",
-//         "&:hover": {
-//           backgroundColor: "#283593"
-//         }
-//       }
-//     }
-//   }
-// });

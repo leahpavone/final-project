@@ -3,33 +3,33 @@
 // You also need to update the user document with the photoURL when uploading a user's image on the user document
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { onAuthStateChanged } from "firebase/auth";
-import {
-  getDoc,
-  doc,
-  getDocs,
-  onSnapshot,
-  collection
-} from "firebase/firestore";
-import { auth, db } from "../utilities/firebase";
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "../utilities/firebase";
 import AuthContext from "./AuthContext";
+import { PageSpinner } from "../components/Spinners";
 
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
+  const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(null);
-  const [users, setUsers] = useState([]);
 
   const { currentUser } = useContext(AuthContext);
 
   useEffect(() => {
     if (currentUser) {
+      setLoading(true);
       onSnapshot(doc(db, "users", currentUser.uid), (doc) => {
         console.log("Current data: ", doc.data());
         setUser(doc.data());
+        setLoading(false);
       });
     }
   }, [currentUser]);
+
+  if (loading) {
+    return <PageSpinner />;
+  }
 
   return (
     <UserContext.Provider
