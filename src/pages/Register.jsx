@@ -27,6 +27,7 @@ import { Visibility, VisibilityOff, ErrorOutline } from "@mui/icons-material";
 import { registerFormSchema } from "../schemas";
 import { useFormik } from "formik";
 import InputField from "../components/InputField";
+import NoUserDrawer from "../components/NoUserDrawer";
 
 const Register = () => {
   const [currentPassVisible, setCurrentPassVisible] = useState(false);
@@ -89,6 +90,7 @@ const Register = () => {
   };
 
   useEffect(() => {
+    // ! change to just currentUser
     if (auth.currentUser !== null) {
       navigate("/dashboard");
     }
@@ -124,13 +126,15 @@ const Register = () => {
         pt: 4,
         pb: 4
       }}>
+      <NoUserDrawer />
+
       <Box
         sx={{
           backgroundColor: "primary.main",
           width: { xs: "80%", md: "70%", lg: "60%" },
           height: "max-content",
           borderRadius: "4px",
-          // p: 3,
+          ml: { xs: 0, md: "220px" },
           display: "flex",
           flexDirection: "column"
         }}>

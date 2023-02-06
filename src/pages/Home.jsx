@@ -21,13 +21,13 @@ const Home = () => {
     <Container
       maxWidth="100vw"
       sx={{
-        height: "100vh",
-        width: "100%",
+        minHeight: "100vh",
+        // width: "100%",
         display: "flex",
         flexDirection: "column",
-        bgcolor: "primary.main"
+        backgroundColor: "primary.main"
       }}>
-      <UserDrawer />
+      {currentUser ? <UserDrawer /> : <NoUserDrawer />}
       <AccountMenu />
 
       <Container

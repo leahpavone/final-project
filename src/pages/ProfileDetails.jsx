@@ -123,7 +123,6 @@
 import { useContext, useState, useRef, useEffect } from "react";
 import AuthContext from "../context/AuthContext";
 import UserContext from "../context/UserContext";
-import { db } from "../utilities/firebase";
 import {
   updateProfile,
   updateEmail,
@@ -134,11 +133,15 @@ import {
 import { auth } from "../utilities/firebase";
 import { useNavigate, Link } from "react-router-dom";
 import ResetPassword from "../components/ResetPassword";
-import { ErrorOutline, Visibility, VisibilityOff } from "@mui/icons-material";
+import {
+  ErrorOutline,
+  TrendingFlat,
+  Visibility,
+  VisibilityOff
+} from "@mui/icons-material";
 import dayjs from "dayjs";
 import axios from "axios";
 import AccountMenu from "../components/AccountMenu";
-import Navbar from "../components/Navbar";
 import {
   Button,
   Typography,
@@ -146,14 +149,15 @@ import {
   TextField,
   Container,
   InputAdornment,
-  Divider
+  Divider,
+  Grid,
+  Snackbar
 } from "@mui/material";
 import { updateNameEmailFormSchema } from "../schemas";
-import { Formik, Form, Field, useFormik } from "formik";
+import { useFormik } from "formik";
 import UploadProfilePhoto from "../components/UploadProfilePhoto";
 import InputField from "../components/InputField";
 import UserDrawer from "../components/UserDrawer";
-// import { StyledTextField } from "../components/InputField";
 
 function ProfileDetails() {
   const [currentPassVisible, setCurrentPassVisible] = useState(false);
@@ -161,7 +165,6 @@ function ProfileDetails() {
 
   const [currentPasswordError, setCurrentPasswordError] = useState("");
   const [cPassError, setCPassError] = useState(false);
-  // const [currentPassword, setCurrentPassword] = useState("");
   const [fieldError, setFieldError] = useState("");
   const [isResetting, setIsResetting] = useState(false);
   const [updateDetails, setUpdateDetails] = useState(false);
@@ -240,23 +243,19 @@ function ProfileDetails() {
       setIsAuthenticated(true);
       setCurrentPasswordError("");
       setCPassError(false);
-      // setFieldError("");
     } catch (error) {
       console.log(error.code);
 
       if (error.code === "auth/wrong-password") {
-        // setFieldError("Password does not match");
         setCPassError(true);
         setCurrentPasswordError("Password does not match");
       }
       if (currentPasswordRef.current.value < 0) {
-        // setFieldError("Please enter your current password");
         setCPassError(true);
         setCurrentPasswordError("Please enter your current password");
       }
       setIsAuthenticated(false);
       setCPassError(true);
-      // setCurrentPasswordError("Please enter your current password");
     }
   };
 
@@ -265,9 +264,7 @@ function ProfileDetails() {
     console.log(currentPasswordRef);
     try {
       await reauthenticate(currentPasswordRef.current.value);
-      // setCPassError(false);
     } catch (error) {
-      // setCPassError(true);
       console.log(error);
     }
     console.log(currentPasswordRef.current.value);
@@ -287,13 +284,12 @@ function ProfileDetails() {
       maxWidth="100vw"
       sx={{
         minHeight: "100vh",
+        width: "100%",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        // justifyContent: "center",
-        backgroundColor: "primary.main",
-        width: "100%",
-        bgcolor: "primary.main"
+        backgroundColor: "primary.main"
+        // bgcolor: "primary.main"
       }}>
       <AccountMenu />
 
@@ -301,20 +297,16 @@ function ProfileDetails() {
 
       <Box
         sx={{
-          height: "max-content",
+          height: "fit-content",
           textAlign: "center",
           ml: { xs: 0, md: "220px" },
           mt: 3,
-          pb: 3
+          mb: 3
         }}>
         <Typography
           variant="h4"
           sx={{
-            // width: "fit-content",
             pb: 3
-            // textAlign: "center",
-            // ml: { xs: 0, md: "220px" },
-            // position: "relative"
           }}>
           Account Details
         </Typography>
@@ -323,10 +315,7 @@ function ProfileDetails() {
           <Typography
             variant="h5"
             sx={{
-              // ml: { xs: 0, md: "220px" },
-              // width: { xs: 0, md: "calc(100% - 220px)" },
               display: "flex",
-              // justifyContent: "center",
               color: "accent.main"
             }}>
             {fieldError}
@@ -334,294 +323,384 @@ function ProfileDetails() {
         )}
       </Box>
 
-      {/* <Typography
-        variant="h4"
-        sx={{ pb: 3, textAlign: "center", ml: { xs: 0, md: "220px" } }}>
-        Account Details
-      </Typography>
-
-      {fieldError && (
-        <Typography
-          variant="h5"
-          sx={{
-            // width: { xs: 0, md: "calc(100% - 220px)" },
-            display: "flex",
-            justifyContent: "center",
-            color: "accent.main",
-            position: "absolute",
-            top: 0,
-            left: "50%",
-            transform: "translate(-50%, 50%)"
-          }}>
-          {fieldError}
-        </Typography>
-      )} */}
-
-      <Box
+      <Grid
+        container
         sx={{
-          backgroundColor: "primary.main",
           display: "flex",
-          // alignItems: "center",
-          justifyContent: "space-evenly",
-          // flexDirection: "column",
+          flexDirection: "column",
+          justifyContent: "center",
+          border: "1px solid",
+          borderColor: (theme) => theme.palette.primary.light,
+          borderRadius: "4px",
           ml: { xs: 0, md: "220px" },
-          pt: 4,
-          height: "max-content",
-          alignItems: "flex-start",
-          // width: "100%",
-          // width: { xs: "80%", md: "60%" }
-          width: { xs: "100%", md: "calc(100% - 220px)" }
+          mb: 6,
+          mt: 2,
+          width: { xs: "80%", md: "calc(80% - 220px)" }
         }}>
-        {/* <Box sx={{ height: "max-content", display: "flex" }}>
-          <Divider
-            orientation="vertical"
+        <Grid
+          item
+          xs={12}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: "40px",
+            width: "100%",
+            minHeight: "180px",
+            flexDirection: { xs: "column" },
+            justifyContent: { xs: "center", md: "center" },
+            p: 3
+          }}>
+          <UploadProfilePhoto />
+        </Grid>
+
+        <Divider variant="middle" sx={{ color: "primary.light" }} />
+
+        {/* 
+        //_ === (MAIN) Edit name/email  &  reset password Forms Grid CONTAINER
+        */}
+
+        <Grid
+          container
+          sx={{
+            display: "flex",
+            width: "100%",
+            position: "relative"
+          }}>
+          {/* 
+        //# -- EDIT NAME/EMAIL FORM GRID Item
+        */}
+
+          <Grid
+            item
+            xs={12}
+            lg={6}
+            component="form"
+            onSubmit={submitProfileDetails}
             sx={{
               display: "flex",
-              flex: 1,
-              backgroundColor: "#fff",
-              // borderColor: "accent.light",
-              // borderWidth: "1px",
-              // height: "100%"
+              alignItems: "center",
+              gap: "30px",
+              height: "100%",
+              // minHeight: "150px",
+              // flexDirection: "column",
+              width: { xs: "100%" },
+              flexDirection: { xs: "column" },
+              // justifyContent: { xs: "center", md: "center" },
+              p: 3
+            }}>
+            {/* <Box> */}
+            <Button
+              // size="small"
+              // fullWidth
+              disabled={
+                formik.errors.name || formik.errors.email ? true : false
+              }
+              variant="contained"
+              onClick={() => {
+                updateDetails && submitProfileDetails(formik.values);
+                setUpdateDetails((prevState) => !prevState);
+              }}
+              sx={{ width: "max-content", height: "20px" }}>
+              {updateDetails ? "Done" : "Edit Details"}
+            </Button>
+            {/* </Box> */}
+
+            {/*
+         //_  ==================== EDIT DETAILS FORM  
+           */}
+
+            {/* {updateDetails && ( */}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: { xs: "column", sm: "row" },
+                width: "100%",
+                gap: { xs: "10px", sm: "30px" }
+                // height: "100%",
+                // paddingBottom: "20px"
+              }}>
+              <Box sx={{ display: "flex", flexDirection: "column", flex: "1" }}>
+                <Typography
+                  variant="subtitle2"
+                  sx={{
+                    color: (!updateDetails && "text.disabled") || "accent.main"
+                  }}>
+                  Name
+                </Typography>
+                <TextField
+                  size="small"
+                  formik={formik}
+                  required
+                  disabled={!updateDetails}
+                  error={formik.touched.name && formik.errors.name}
+                  name="name"
+                  defaultValue={formik.values.name}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+              </Box>
+
+              <Box sx={{ display: "flex", flexDirection: "column", flex: "1" }}>
+                <Typography
+                  variant="subtitle2"
+                  sx={{
+                    color: (!updateDetails && "text.disabled") || "accent.main"
+                  }}>
+                  Email
+                </Typography>
+                {/* <Typography
+                  variant="subtitle2"
+                  color={
+                    formik.touched.email && formik.errors.email
+                      ? "error.main"
+                      : "accent.main"
+                  }>
+                  Email
+                </Typography> */}
+                <TextField
+                  size="small"
+                  fullWidth
+                  disabled={!updateDetails}
+                  error={formik.touched.email && formik.errors.email}
+                  variant="outlined"
+                  type="email"
+                  name="email"
+                  defaultValue={formik.values.email}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+              </Box>
+            </Box>
+            {/* )} */}
+          </Grid>
+
+          {/* 
+// # xsmall screen divider
+*/}
+
+          <Divider
+            variant="middle"
+            sx={{
+              color: "primary.light",
+              display: { xs: "flex", lg: "none" },
+              flex: 1
             }}
           />
-        </Box> */}
 
-        <Box
-          sx={{
-            display: "flex",
-            gap: "40px",
-            // alignItems: "center",
-            width: "fit-content",
-            height: "100%"
-            // border: (theme) => `1px solid ${theme.palette.accent.main}`,
-            // borderRadius: 1,
-            // bgcolor: "accent.light",
-            // flex: 1
-            // color: "accent.dark"
-          }}>
-          <Divider orientation="vertical" variant="middle" flexItem />
-          <UploadProfilePhoto />
-        </Box>
+          {/* 
+// # large screen divider
+*/}
 
-        <Box
-          sx={{
-            display: "flex",
-            gap: "40px",
-            // alignItems: "center",
-            width: "fit-content",
-            height: "100%"
-            // border: (theme) => `1px solid ${theme.palette.accent.main}`,
-            // borderRadius: 1,
-            // bgcolor: "accent.light",
-            // flex: 1
-            // color: "accent.dark"
-          }}>
-          <Divider orientation="vertical" variant="middle" flexItem />
-          <Box component="form" onSubmit={submitProfileDetails}>
-            <Box sx={{ display: "flex" }}>
-              <Button
-                fullWidth
-                disabled={
-                  formik.errors.name || formik.errors.email ? true : false
-                }
-                variant="contained"
-                onClick={() => {
-                  updateDetails && submitProfileDetails(formik.values);
-                  setUpdateDetails((prevState) => !prevState);
-                }}>
-                {updateDetails ? "Done" : "Edit Details"}
-              </Button>
-              {/* <Typography variant="caption">{fieldError}</Typography> */}
-            </Box>
+          <Divider
+            orientation="vertical"
+            variant="middle"
+            flexItem
+            sx={{
+              position: "absolute",
+              height: "90%",
+              left: "50%",
+              color: "primary.light",
+              display: { xs: "none", lg: "flex" }
+            }}
+          />
 
-            {updateDetails && (
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  width: "100%",
-                  gap: "30px",
-                  paddingBottom: "20px"
-                }}>
-                <Box
-                  sx={{ display: "flex", flexDirection: "column", flex: "1" }}>
-                  <Typography
-                    variant="subtitle2"
-                    color={formik.errors.name ? "error.main" : "accent.main"}>
-                    Name
-                  </Typography>
-                  <TextField
-                    size="small"
-                    formik={formik}
-                    required
-                    disabled={!updateDetails}
-                    error={formik.touched.name && formik.errors.name}
-                    name="name"
-                    defaultValue={formik.values.name}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                </Box>
+          {/*
+         //_  ====================  RESET PARENT GRID CONTAINER 
+           */}
 
-                <Box
-                  sx={{ display: "flex", flexDirection: "column", flex: "1" }}>
-                  <Typography
-                    variant="subtitle2"
-                    color={
-                      formik.touched.email && formik.errors.email
-                        ? "error.main"
-                        : "accent.main"
-                    }>
-                    Email
-                  </Typography>
-                  <TextField
-                    size="small"
-                    fullWidth
-                    disabled={!updateDetails}
-                    error={formik.touched.email && formik.errors.email}
-                    variant="outlined"
-                    type="email"
-                    name="email"
-                    defaultValue={formik.values.email}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                </Box>
-              </Box>
-            )}
-            {/* <Typography variant="caption">{fieldError}</Typography> */}
-          </Box>
-        </Box>
+          <Grid
+            item
+            xs={12}
+            lg={6}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: "30px",
+              height: "100%",
+              width: { xs: "100%", md: "50%" },
+              flexDirection: { xs: "column", sm: "column" },
+              justifyContent: { xs: "center", md: "center" },
+              p: 3
+            }}>
+            {/* 
+// # -- Reset Password Button
+*/}
 
-        <Box
-          sx={{
-            display: "flex",
-            gap: "40px",
-            // alignItems: "center",
-            width: "fit-content",
-            height: "100%"
-            // border: (theme) => `1px solid ${theme.palette.accent.main}`,
-            // borderRadius: 1,
-            // bgcolor: "accent.light",
-            // flex: 1
-            // color: "accent.dark"
-          }}>
-          <Divider orientation="vertical" variant="middle" flexItem />
-
-          <Box>
             <Button
+              size="small"
+              disabled={isResetting}
               variant="contained"
               sx={{
-                mt: "20px",
-                height: "fit-content"
+                width: "max-content",
+                height: "20px"
               }}
               onClick={handleResetClick}>
-              {isResetting ? "Cancel Reset Password" : "Reset Password"}
+              {/* {isResetting ? "Cancel" : "Reset Password"} */}
+              Reset Password
             </Button>
 
-            {isResetting && (
-              <Box
-                sx={
-                  {
-                    // display: "flex",
-                    // gap: "40px"
-                  }
-                }>
+            {/*
+         //_  =============  current & new password FORMs (Grid Container) 
+           */}
+
+            {/* {isResetting && ( */}
+            <Grid
+              container
+              sx={{
+                display: "flex",
+                flex: "1",
+                alignItems: { xs: "", lg: "" },
+                flexDirection: { xs: "column", md: "row" },
+                width: "100%",
+                gap: { xs: "10px" }
+                // border: "1px solid yellow"
+              }}>
+              {/*
+         //#  ===============  current password FORM (Grid Item) 
+           */}
+
+              <Grid
+                item
+                xs={12}
+                component="form"
+                onSubmit={handleSubmit}
+                sx={{
+                  width: { xs: "100%", lg: "50%" },
+                  height: "100%",
+                  display: "flex",
+                  alignItems: "flex-end",
+                  // border: "2px solid orange",
+                  // flexDirection: { xs: "row", md: "column" },
+                  flex: 1
+                }}>
+                {/*
+                        //#  -- Current Password label, input, error container (Box)
+                        */}
+
                 <Box
-                  component="form"
-                  onSubmit={handleSubmit}
                   sx={{
-                    pt: "20px",
-                    width: "100%",
+                    height: "100%",
                     display: "flex",
                     flexDirection: "column",
-                    gap: "10px"
+                    flex: "1"
+                    // alignItems: "center",
+                    // justifyContent: "flex-start",
+                    // gap: "1px",
+                    // width: { xs: "100%", lg: "50%" }
                   }}>
-                  <Box
+                  <Typography
+                    variant="subtitle2"
                     sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "flex-start",
-                      gap: "10px",
-                      width: "100%"
+                      color:
+                        (!isResetting && "text.disabled") ||
+                        (cPassError && "#fff") ||
+                        "accent.main"
                     }}>
-                    <Typography
-                      variant="subtitle2"
-                      color={cPassError ? "error.main" : "accent.main"}>
-                      Enter current password
-                    </Typography>
+                    Enter your password
+                  </Typography>
+
+                  <Box sx={{ display: "flex", flexDirection: "column" }}>
                     <TextField
-                      disabled={isAuthenticated}
+                      disabled={isAuthenticated || !isResetting}
+                      display={isAuthenticated ? "none" : "inline"}
                       error={cPassError}
                       placeholder="Current password"
                       size="small"
                       inputRef={currentPasswordRef}
                       variant="outlined"
                       type={currentPassVisible ? "text" : "password"}
+                      sx={{ position: "relative" }}
                       InputProps={{
                         endAdornment: (
                           <InputAdornment
                             position="end"
                             onClick={showCurrentPasswordClick}>
                             {currentPassVisible ? (
-                              <Visibility />
+                              <Visibility fontSize="small" />
                             ) : (
-                              <VisibilityOff />
+                              <VisibilityOff fontSize="small" />
                             )}
                           </InputAdornment>
                         )
                       }}
                     />
 
-                    {/* <Box> */}
+                    {/*
+                        //#  --- Current Password Error 
+                        */}
+
                     {cPassError && (
                       <Typography
                         variant="caption"
                         sx={{
                           display: "flex",
                           gap: "5px",
-                          color: "error.main"
+                          color: "error.main",
+                          position: "absolute",
+                          // bottom: "50%",
+                          transform: "translateY(220%)"
                         }}>
                         <ErrorOutline sx={{ height: "16px", width: "16px" }} />
                         {currentPasswordError}
                       </Typography>
                     )}
-                    {/* </Box> */}
-
-                    {/* <Box>
-                  {cPassError ? (
-                    <Typography
-                      variant="caption"
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "5px",
-                        height: "min-content",
-                        color: "error.main"
-                      }}>
-                      <ErrorOutline sx={{ height: "16px", width: "16px" }} />
-                      {cPassError}
-                    </Typography>
-                  ) : (
-                    ""
-                  )}
-                </Box> */}
                   </Box>
+                </Box>
 
+                {/*
+                        //#  -- Current Password Submit Button container & button (Box)
+                        */}
+                <Box sx={{ display: "flex" }}>
                   <Button
-                    disabled={isAuthenticated}
+                    disabled={isAuthenticated || !isResetting}
                     onClick={handleSubmit}
                     type="submit"
                     component="label">
-                    Submit
+                    <TrendingFlat
+                      fontSize="medium"
+                      sx={{
+                        color: "primary.light",
+                        backgroundColor:
+                          !isResetting || isAuthenticated
+                            ? "accent.disabled"
+                            : "accent.dark",
+                        borderRadius: "4px",
+                        height: "20px"
+                      }}
+                    />
                   </Button>
                 </Box>
+              </Grid>
+
+              {/*
+                        //_  ================== ENTER NEW PASSWORD FORM GRID CONTAINER 
+                        */}
+
+              {/*
+         //#  ================  new password FORM (Grid Item) 
+           */}
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  width: { xs: "100%", lg: "50%" },
+                  display: "flex",
+                  flexDirection: { xs: "row", sm: "column" },
+                  flex: 1
+                }}>
                 {isAuthenticated && <ResetPassword />}
-              </Box>
-            )}
-          </Box>
-        </Box>
-      </Box>
+              </Grid>
+            </Grid>
+            {/* )} */}
+          </Grid>
+        </Grid>
+        {/* <Divider
+          // orientation="vertical"
+          variant="middle"
+          flexItem
+          sx={{ color: "primary.light", borderRightWidth: "1px" }}
+        /> */}
+      </Grid>
     </Container>
   );
 }
@@ -630,42 +709,178 @@ export default ProfileDetails;
 
 // eslint-disable-next-line no-lone-blocks
 {
-  /* <form onSubmit={handleSubmit}>
-              <label htmlFor="enter-current-password">
-                Enter current password:
-              </label>
-              <div>
-                <input
-                  id="newPassword"
-                  type={currentPassVisible ? "text" : "password"}
-                  placeholder="Current password"
-                  sx={{ p: 1 }}
-                  ref={currentPasswordRef}
-                  required
-                />
-                <div>
-                  {currentPassVisible ? (
-                    <Visibility
-                      onClick={showCurrentPasswordClick}
-                      sx={{ width: 20 }}
-                    />
-                  ) : (
-                    <VisibilityOff
-                      onClick={showCurrentPasswordClick}
-                      sx={{ width: 20 }}
-                    />
-                  )}
-                </div>
-              </div>
+  /* <Box
+  sx={{
+    backgroundColor: "primary.main",
+    display: "flex",
+    justifyContent: "center",
+    ml: { xs: 0, md: "220px" },
+    pt: 4,
+    height: "max-content",
+    alignItems: "flex-start",
+    width: { xs: "100%", md: "calc(100% - 220px)" }
+  }}>
+  <Divider orientation="vertical" variant="middle" flexItem sx={{}} />
+  <Box sx={{ p: " 0 40px" }}>
+    <UploadProfilePhoto />
+  </Box>
 
-              <div>{fieldError ? <div>{fieldError}</div> : ""}</div>
+  <Divider orientation="vertical" variant="middle" flexItem />
 
-              {isAuthenticated ? (
-                <></>
-              ) : (
-                <button type="submit" className="btn authenticate-btn">
-                  Submit
-                </button>
-              )}
-            </form> */
+  <Box component="form" onSubmit={submitProfileDetails} sx={{ p: " 0 40px" }}>
+    <Box sx={{ display: "flex" }}>
+      <Button
+        fullWidth
+        disabled={formik.errors.name || formik.errors.email ? true : false}
+        variant="contained"
+        onClick={() => {
+          updateDetails && submitProfileDetails(formik.values);
+          setUpdateDetails((prevState) => !prevState);
+        }}>
+        {updateDetails ? "Done" : "Edit Details"}
+      </Button>
+    </Box>
+
+    {updateDetails && (
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          width: "100%",
+          gap: "30px",
+          paddingBottom: "20px"
+        }}>
+        <Box sx={{ display: "flex", flexDirection: "column", flex: "1" }}>
+          <Typography
+            variant="subtitle2"
+            color={formik.errors.name ? "error.main" : "accent.main"}>
+            Name
+          </Typography>
+          <TextField
+            size="small"
+            formik={formik}
+            required
+            disabled={!updateDetails}
+            error={formik.touched.name && formik.errors.name}
+            name="name"
+            defaultValue={formik.values.name}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+          />
+        </Box>
+
+        <Box sx={{ display: "flex", flexDirection: "column", flex: "1" }}>
+          <Typography
+            variant="subtitle2"
+            color={
+              formik.touched.email && formik.errors.email
+                ? "error.main"
+                : "accent.main"
+            }>
+            Email
+          </Typography>
+          <TextField
+            size="small"
+            fullWidth
+            disabled={!updateDetails}
+            error={formik.touched.email && formik.errors.email}
+            variant="outlined"
+            type="email"
+            name="email"
+            defaultValue={formik.values.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+          />
+        </Box>
+      </Box>
+    )}
+  </Box>
+
+  <Divider orientation="vertical" variant="middle" flexItem />
+
+  <Box sx={{ p: " 0 40px" }}>
+    <Button
+      variant="contained"
+      sx={{
+        mt: "20px",
+        height: "fit-content"
+      }}
+      onClick={handleResetClick}>
+      {isResetting ? "Cancel Reset Password" : "Reset Password"}
+    </Button>
+
+    {isResetting && (
+      <Box
+       >
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          sx={{
+            pt: "20px",
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            gap: "10px"
+          }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-start",
+              gap: "10px",
+              width: "100%"
+            }}>
+            <Typography
+              variant="subtitle2"
+              color={cPassError ? "error.main" : "accent.main"}>
+              Enter current password
+            </Typography>
+            <TextField
+              disabled={isAuthenticated}
+              error={cPassError}
+              placeholder="Current password"
+              size="small"
+              inputRef={currentPasswordRef}
+              variant="outlined"
+              type={currentPassVisible ? "text" : "password"}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment
+                    position="end"
+                    onClick={showCurrentPasswordClick}>
+                    {currentPassVisible ? <Visibility /> : <VisibilityOff />}
+                  </InputAdornment>
+                )
+              }}
+            />
+
+            {cPassError && (
+              <Typography
+                variant="caption"
+                sx={{
+                  display: "flex",
+                  gap: "5px",
+                  color: "error.main"
+                }}>
+                <ErrorOutline sx={{ height: "16px", width: "16px" }} />
+                {currentPasswordError}
+              </Typography>
+            )}
+        
+          </Box>
+
+          <Button
+            disabled={isAuthenticated}
+            onClick={handleSubmit}
+            type="submit"
+            component="label">
+            Submit
+          </Button>
+        </Box>
+        {isAuthenticated && <ResetPassword />}
+      </Box>
+    )}
+  </Box>
+  <Divider orientation="vertical" variant="middle" flexItem sx={{}} />
+</Box>; */
 }

@@ -26,8 +26,9 @@ function App() {
       primary: {
         main: "#1a1a1a",
         dark: "#171717",
+        darkest: "#121212",
         light: "#313131",
-        darkest: "#121212"
+        lightest: "#e8e8e8"
       },
       // secondary: {
       //   main: "#faf9f6",
@@ -39,7 +40,8 @@ function App() {
         dark: "#917ca2",
         light: "#c4afd5",
         disabled: "#5b4e65",
-        active: "#362e3d"
+        active: "#362e3d",
+        bg: "#362e3d"
       },
       divider: {
         main: "#fff"
@@ -74,13 +76,18 @@ function App() {
       MuiCssBaseline: {
         styleOverrides: {
           "&.MuiTypography-root": {
-            color: "#b59bca",
-            "&.Mui-disabled": {
-              color: "#5b4e65"
-            }
+            color: "#b59bca"
+            // "&:disabled": {
+            //   borderColor: "#5b4e65",
+            //   border: "2px"
+            // }
           },
           "&.MuiInputBase-root": {
             borderRadius: "4px",
+            // "&:disabled": {
+            //   borderColor: "#fff",
+            //   borderWidth: "5px"
+            // },
             "&.MuiOutlinedInput-root": {
               // display: "flex",
               // flex: 1,
@@ -104,7 +111,7 @@ function App() {
                 borderWidth: "2.5px"
               },
               "&.Mui-disabled fieldset": {
-                borderColor: "#5b4e65",
+                // borderColor: "#fff",
                 border: "2px solid"
               }
             },

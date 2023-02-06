@@ -18,6 +18,8 @@ import { loginFormSchema } from "../schemas";
 import { useFormik } from "formik";
 import { useTheme } from "@mui/system";
 import InputField from "../components/InputField";
+import UserContext from "../context/UserContext";
+import NoUserDrawer from "../components/NoUserDrawer";
 
 const Login = () => {
   const [fieldError, setFieldError] = useState("");
@@ -26,6 +28,8 @@ const Login = () => {
   const theme = useTheme();
 
   const { user } = useContext(AuthContext);
+
+  const { currentUser } = useContext(UserContext);
 
   const navigate = useNavigate();
 
@@ -70,10 +74,10 @@ const Login = () => {
   // how to delete password
 
   useEffect(() => {
-    if (user) {
+    if (currentUser) {
       navigate("/dashboard");
     }
-  }, [user, navigate]);
+  }, [currentUser, navigate]);
 
   return (
     <Container
@@ -83,17 +87,19 @@ const Login = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        flexDirection: "column",
         backgroundColor: "primary.main",
         pt: 4,
         pb: 4
       }}>
+      <NoUserDrawer />
+
       <Box
         sx={{
           width: { xs: "80%", md: "70%", lg: "60%" },
           backgroundColor: "primary.main",
-          borderRadius: "4px"
-
-          // p: 3
+          borderRadius: "4px",
+          ml: { xs: 0, md: "220px" }
         }}>
         <Typography
           variant="h4"

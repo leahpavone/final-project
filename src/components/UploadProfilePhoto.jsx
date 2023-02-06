@@ -78,18 +78,15 @@ const UploadProfilePhoto = () => {
       sx={{
         display: "flex",
         flexDirection: "column",
+        gap: "10px",
         alignItems: "center"
-        // mb: "30px"
       }}>
       <Box
         sx={{
-          height: 175,
-          width: 200,
-          mb: "10px",
           display: "flex",
-          flexDirection: "column",
-          alignItems: "center"
-          // position: "relative"
+          alignItems: "center",
+          border: (theme) => `4px solid ${theme.palette.accent.active}`,
+          borderRadius: "500px"
         }}>
         {loading ? (
           <UploadProfilePhotoSpinner />
@@ -98,21 +95,25 @@ const UploadProfilePhoto = () => {
             {user?.photoURL ? (
               <Avatar
                 src={user.photoURL.toString()}
-                sx={{ width: 175, height: 175 }}
+                sx={{ width: 96, height: 96 }}
               />
             ) : (
-              <Avatar sx={{ width: 175, height: 175 }} />
+              <Avatar sx={{ width: 96, height: 96 }} />
             )}
           </Box>
         )}
       </Box>
-
       <Button
+        size="small"
         disabled={uploadingPhoto}
         variant="contained"
         component="label"
-        sx={{}}>
-        Change profile photo
+        sx={{
+          // height: "max-content",
+          width: "max-content",
+          height: "20px"
+        }}>
+        Change avatar
         <input type="file" accept="image/*" onChange={handleChange} hidden />
       </Button>
     </Box>

@@ -22,10 +22,7 @@ const Search = () => {
         height: "100vh",
         display: "flex",
         flexDirection: "column",
-        // textAlign: "center",
         bgcolor: "primary.main"
-        // height: "100vh",
-        // width: "100vw"
       }}>
       <UserDrawer />
       <AccountMenu />

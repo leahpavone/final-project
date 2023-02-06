@@ -43,7 +43,7 @@ const InputField = ({ formik, name, type, label, placeholder, icon }) => {
               borderWidth: "2.5px"
             },
             "&.Mui-error fieldset": {
-              borderColor: "error",
+              borderColor: "error.main",
               borderWidth: "2px"
             }
           },

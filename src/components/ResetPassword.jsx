@@ -10,7 +10,6 @@ import {
   InputAdornment,
   TextField
 } from "@mui/material";
-// import { StyledTextField } from "../components/InputField";
 import { passwordRules } from "../schemas";
 import { PageSpinner } from "./Spinners";
 
@@ -18,6 +17,7 @@ function ResetPassword() {
   const [loading, setLoading] = useState(false);
   const [newPassVisible, setNewPassVisible] = useState(false);
   const [fieldError, setFieldError] = useState("");
+  const [newPassError, setNewPassError] = useState(false);
 
   const navigate = useNavigate();
   const newPasswordRef = useRef();
@@ -29,19 +29,23 @@ function ResetPassword() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    if (newPasswordRef.current.value.length < 6) {
-      setFieldError("Password must be at least 6 characters long");
-      setLoading(false);
-    } else if (!newPasswordRef.current.value.match(passwordRules)) {
+    console.log(e);
+    if (
+      newPasswordRef.current.value.length < 6 ||
+      !newPasswordRef.current.value.match(passwordRules)
+    ) {
+      setNewPassError(true);
       setFieldError(
-        "Password must contain at least: 1 uppercase character, 1 lowercase character, and 1 numeric character."
+        "Password must contain at least: at least 6 characters, 1 uppercase character, 1 lowercase character, and 1 numeric character."
       );
+      // setLoading(false);
       setLoading(false);
       newPasswordRef.current.value = "";
     } else {
       updatePassword(auth.currentUser, newPasswordRef.current.value)
         .then(() => {
           setLoading(false);
+          setNewPassError(false);
           setFieldError("successfully updated password!");
           console.log("successfully changed password");
           setTimeout(() => {
@@ -55,6 +59,13 @@ function ResetPassword() {
     }
   };
 
+  const handleChange = (e) => {
+    if (e.target.value.match(passwordRules) !== null) {
+      setNewPassError(false);
+      setFieldError("");
+    }
+  };
+
   if (loading) {
     return <PageSpinner />;
   }
@@ -63,55 +74,121 @@ function ResetPassword() {
     <Box
       sx={{
         display: "flex",
-        width: "100%"
+        // flex: 1,
+        alignItems: "flex-end",
+        width: "100%",
+        justifyContent: "space-between"
+        // maxWidth: "50%"
+        // minHeight: "200px"
+        // p: 3
       }}>
       <Box
         component="form"
         onSubmit={handleSubmit}
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "10px",
+          height: "100%",
           width: "100%",
-          pt: "20px"
+          display: "flex",
+          alignItems: "flex-end"
+          // flex: "1 0 auto"
+          // pt: "20px"
         }}>
-        <Typography variant="subtitle2" color="accent.main">
-          Enter new password
-        </Typography>
-        <TextField
-          placeholder="New password"
-          size="small"
-          inputRef={newPasswordRef}
-          variant="outlined"
-          type={newPassVisible ? "text" : "password"}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end" onClick={showNewPasswordClick}>
-                {newPassVisible ? <Visibility /> : <VisibilityOff />}
-              </InputAdornment>
-            )
-          }}
-        />
-
-        <Box>
-          {fieldError ? (
-            <Typography
-              variant="caption"
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            // height: "100%",
+            flex: "1",
+            // justifyContent: "flex-start",
+            // gap: "1px",
+            width: "100%"
+          }}>
+          <Typography
+            variant="subtitle2"
+            sx={{ color: (fieldError && "error.main") || "accent.main" }}>
+            Enter new password
+          </Typography>
+          <Box
+            sx={{
+              // width: "100%",
+              display: "flex",
+              flexDirection: "column"
+              // flex: 1
+            }}>
+            <TextField
+              onChange={handleChange}
+              // disabled={newPassError}
+              // fullWidth
+              // error={fieldError}
+              error={newPassError}
+              size="small"
+              placeholder="New password"
+              inputRef={newPasswordRef}
+              variant="outlined"
+              type={newPassVisible ? "text" : "password"}
               sx={{
-                display: "flex",
-                gap: "5px",
-                color: "error.main"
-              }}>
-              <ErrorOutline sx={{ height: "16px", width: "16px" }} />
-              {fieldError}
-            </Typography>
-          ) : (
-            ""
-          )}
-        </Box>
+                position: "relative",
+                borderColor: newPassError ? "#fff" : "accent.main"
+                // border: "1px solid"
+              }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment
+                    position="end"
+                    onClick={showNewPasswordClick}
+                    height="max-content">
+                    {newPassVisible ? (
+                      <Visibility fontSize="small" />
+                    ) : (
+                      <VisibilityOff fontSize="small" />
+                    )}
+                  </InputAdornment>
+                )
+              }}
+            />
 
-        <Button type="submit" component="label" onClick={handleSubmit}>
-          Save new password
+            {/* <Box> */}
+            {fieldError && (
+              <Typography
+                variant="caption"
+                sx={{
+                  display: "flex",
+                  gap: "5px",
+                  color: "error.main",
+                  pt: "5px"
+                  // position: "absolute",
+                  // bottom: "50%",
+                  // transform: "translateY(220%)"
+                }}>
+                <ErrorOutline sx={{ height: "16px", width: "16px" }} />
+                {fieldError}
+              </Typography>
+            )}
+            {/* </Box> */}
+          </Box>
+        </Box>
+      </Box>
+      <Box sx={{ display: "flex", flex: 0 }}>
+        <Button
+          disabled={fieldError ? true : false}
+          size="small"
+          type="submit"
+          component="label"
+          onClick={handleSubmit}
+          sx={{
+            // display: "flex",
+            // textAlign: "center",
+            // flex: 0,
+            // justifyContent: "flex-end",
+            // flexWrap: "nowrap",
+            // width: "fit-content",
+            width: "100%",
+            // gap: "50px",
+            // fontSize: "12px",
+            p: 0
+            // ml: 2
+          }}>
+          Save
         </Button>
       </Box>
     </Box>

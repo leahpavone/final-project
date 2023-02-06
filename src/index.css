@@ -14,26 +14,14 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  overflow-y: hidden;
+  /* overflow-y: hidden; */
 }
 
 html,
 body {
   /* height: 100vh; */
-  max-width: 100vw;
-  /* overflow-y: hidden; */
-  /* width: 100%; */
+  /* max-width: 100vw; */
   font-family: "Roboto";
 }
 
 /* color: rgb(180, 184, 217) */
-
-/* 
-
-In this example, I created a background property that defines the main background color of the app, a text property that defines the primary and secondary text color of the app and an accent property that defines the accent color of the app.
-
-Then I used the overrides property to change the default colors of the AppBar, button, and typography components to match the colors defined in the theme.
-
-For example, the background color of the AppBar is set to the background.main and the text color is set to text.primary. Also, the background color of the button is set to accent.main and the text color is set to text.primary and the hover background color is set to accent.dark.
-
-*/
