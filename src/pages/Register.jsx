@@ -1,8 +1,10 @@
 import { useState, useContext, useEffect, useRef } from "react";
+import { auth } from "../utilities/firebase";
 import axios from "axios";
 import dayjs from "dayjs";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { Link, useNavigate } from "react-router-dom";
-import { auth } from "../utilities/firebase";
 import {
   createUserWithEmailAndPassword,
   getIdToken,
@@ -10,6 +12,7 @@ import {
 } from "firebase/auth";
 import AuthContext from "../context/AuthContext";
 import OAuth from "../components/OAuth";
+import { Visibility, VisibilityOff, ErrorOutline } from "@mui/icons-material";
 import {
   Button,
   Typography,
@@ -17,23 +20,20 @@ import {
   TextField,
   Box,
   Grid,
-  Divider,
   Container
 } from "@mui/material";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-
-import { Visibility, VisibilityOff, ErrorOutline } from "@mui/icons-material";
 import { registerFormSchema } from "../schemas";
 import { useFormik } from "formik";
 import InputField from "../components/InputField";
 import NoUserDrawer from "../components/NoUserDrawer";
+import { PageSpinner } from "../components/Spinners";
 
 const Register = () => {
   const [currentPassVisible, setCurrentPassVisible] = useState(false);
   const [confirmPassVisible, setConfirmPassVisible] = useState(false);
 
   const [userBirthday, setUserBirthday] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const { currentUser } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -42,6 +42,7 @@ const Register = () => {
     // actions.resetForm();
     const { name, email, password, phoneNumber, birthday } = values;
     try {
+      setLoading(true);
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -73,9 +74,11 @@ const Register = () => {
           }
         )
         .catch((error) => console.log(error));
+      setLoading(false);
       navigate("/dashboard");
       console.log("profile added");
     } catch (error) {
+      setLoading(false);
       const code = error.code;
       const message = error.message;
       console.error({ code, message });
@@ -88,17 +91,6 @@ const Register = () => {
   const showConfirmPasswordClick = async () => {
     setConfirmPassVisible(!confirmPassVisible);
   };
-
-  useEffect(() => {
-    // ! change to just currentUser
-    if (auth.currentUser !== null) {
-      navigate("/dashboard");
-    }
-  }, [currentUser, navigate]);
-
-  // if (loading) {
-  //   return <div>Loading...</div>;
-  // }
 
   const formik = useFormik({
     initialValues: {
@@ -113,16 +105,26 @@ const Register = () => {
     onSubmit
   });
 
+  useEffect(() => {
+    if (currentUser !== null) {
+      navigate("/dashboard");
+    }
+  }, [currentUser, navigate]);
+
+  if (loading) {
+    return <PageSpinner />;
+  }
+
   return (
     <Container
       maxWidth="100vw"
       sx={{
         minHeight: "100vh",
+        backgroundColor: "primary.main",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "primary.main",
         pt: 4,
         pb: 4
       }}>
@@ -130,22 +132,23 @@ const Register = () => {
 
       <Box
         sx={{
-          backgroundColor: "primary.main",
-          width: { xs: "80%", md: "70%", lg: "60%" },
-          height: "max-content",
-          borderRadius: "4px",
-          ml: { xs: 0, md: "220px" },
           display: "flex",
-          flexDirection: "column"
+          flexDirection: "column",
+          width: { xs: "80%", md: "70%", lg: "60%" },
+          minHeight: "100%",
+          borderRadius: "4px",
+          ml: { xs: 0, md: "220px" }
         }}>
         <Typography
           variant="h4"
           sx={{
+            height: "100%",
             color: "accent.main",
             textAlign: "center",
             paddingBottom: "20px",
             fontSize: { xs: "32px", lg: "48px" },
-            fontWeight: 600
+            fontWeight: 600,
+            pb: 8
           }}>
           Create an Account
         </Typography>
@@ -156,7 +159,8 @@ const Register = () => {
           sx={{
             display: "flex",
             flexDirection: "column",
-            gap: "24px"
+            height: "fit-content",
+            gap: "30px"
           }}>
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
@@ -212,8 +216,8 @@ const Register = () => {
                   inputFormat="MM/DD/YYYY"
                   renderInput={(props) => (
                     <TextField
-                      fullWidth
                       {...props}
+                      fullWidth
                       size="small"
                       placeholder="MM/DD/YYYY"
                       name="birthday"
@@ -225,22 +229,21 @@ const Register = () => {
                   )}
                 />
               </LocalizationProvider>
-              <Box>
-                {formik.touched.birthday && formik.errors.birthday && (
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "5px",
-                      height: "min-content",
-                      color: "error.main"
-                    }}>
-                    <ErrorOutline sx={{ height: "16px", width: "16px" }} />
-                    {formik.touched.birthday && formik.errors.birthday}
-                  </Typography>
-                )}
-              </Box>
+
+              {formik.touched.birthday && formik.errors.birthday && (
+                <Typography
+                  variant="caption"
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px",
+                    height: "min-content",
+                    color: "error.main"
+                  }}>
+                  <ErrorOutline sx={{ height: "16px", width: "16px" }} />
+                  {formik.touched.birthday && formik.errors.birthday}
+                </Typography>
+              )}
             </Grid>
 
             <Grid item xs={12} md={6}>
@@ -276,22 +279,20 @@ const Register = () => {
                 }}
               />
 
-              <Box>
-                {formik.touched.password && formik.errors.password && (
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "5px",
-                      height: "min-content",
-                      color: "error.main"
-                    }}>
-                    <ErrorOutline sx={{ height: "16px", width: "16px" }} />
-                    {formik.touched.password && formik.errors.password}
-                  </Typography>
-                )}
-              </Box>
+              {formik.touched.password && formik.errors.password && (
+                <Typography
+                  variant="caption"
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px",
+                    height: "min-content",
+                    color: "error.main"
+                  }}>
+                  <ErrorOutline sx={{ height: "16px", width: "16px" }} />
+                  {formik.touched.password && formik.errors.password}
+                </Typography>
+              )}
             </Grid>
 
             <Grid item xs={12} md={6}>
@@ -331,24 +332,22 @@ const Register = () => {
                 }}
               />
 
-              <Box>
-                {formik.touched.confirmPassword &&
-                  formik.errors.confirmPassword && (
-                    <Typography
-                      variant="caption"
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "5px",
-                        height: "min-content",
-                        color: "error.main"
-                      }}>
-                      <ErrorOutline sx={{ height: "16px", width: "16px" }} />
-                      {formik.touched.confirmPassword &&
-                        formik.errors.confirmPassword}
-                    </Typography>
-                  )}
-              </Box>
+              {formik.touched.confirmPassword &&
+                formik.errors.confirmPassword && (
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "5px",
+                      height: "min-content",
+                      color: "error.main"
+                    }}>
+                    <ErrorOutline sx={{ height: "16px", width: "16px" }} />
+                    {formik.touched.confirmPassword &&
+                      formik.errors.confirmPassword}
+                  </Typography>
+                )}
             </Grid>
           </Grid>
 
@@ -369,54 +368,8 @@ const Register = () => {
           </Button>
         </Box>
 
-        <Box
-          sx={{
-            height: "100%",
-            display: "flex",
-            flexDirection: "column",
-            gap: "10px"
-          }}>
-          <Box sx={{ pt: "24px" }}>
-            <Divider
-              sx={{
-                color: "rgba(181, 155, 202, 0.5)",
-                width: "95%",
-                margin: "0 auto",
-                "&::before": {
-                  borderTop: "thin solid rgba(181, 155, 202, 0.5)"
-                },
-                "&::after": {
-                  borderTop: "thin solid rgba(181, 155, 202, 0.5)"
-                }
-              }}>
-              or
-            </Divider>
-          </Box>
-
-          <OAuth />
-
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center"
-            }}>
-            <Typography
-              variant="subtitle1"
-              sx={{ color: "rgba(181, 155, 202, 0.7)" }}>
-              Already have an account?
-            </Typography>
-            <Button
-              component={Link}
-              variant="text"
-              sx={{ fontSize: "16px", letterSpacing: "1px", p: 0 }}
-              to={"/login"}>
-              Login
-            </Button>
-          </Box>
-        </Box>
+        <OAuth />
       </Box>
-      {/* </Box> */}
     </Container>
   );
 };

@@ -1,11 +1,12 @@
-import { Box, Button, Container, Typography } from "@mui/material";
+import { useState, useContext } from "react";
+import { Container, Typography } from "@mui/material";
 import UserDrawer from "../components/UserDrawer";
-import { Link } from "react-router-dom";
 import AccountMenu from "../components/AccountMenu";
-import AuthContext from "../context/AuthContext";
-import UserContext from "../context/UserContext";
-import { useState, useEffect, useContext } from "react";
 import { PageSpinner } from "../components/Spinners";
+import NoUserDrawer from "../components/NoUserDrawer";
+// import { Link } from "react-router-dom";
+import AuthContext from "../context/AuthContext";
+// import UserContext from "../context/UserContext";
 
 const Search = () => {
   const [loading, setLoading] = useState(false);
@@ -20,11 +21,11 @@ const Search = () => {
       maxWidth="100vw"
       sx={{
         height: "100vh",
+        backgroundColor: "primary.main",
         display: "flex",
-        flexDirection: "column",
-        bgcolor: "primary.main"
+        flexDirection: "column"
       }}>
-      <UserDrawer />
+      {currentUser ? <UserDrawer /> : <NoUserDrawer />}
       <AccountMenu />
 
       <Container

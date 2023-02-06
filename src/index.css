@@ -1,27 +1,14 @@
-/* COLORS ----
-
-#1f1e1e - dark
-#e1dfd3 - light
-#5a8077 - accent
-#6b8d85 - accentLight
-#7b9992 - accentLightest
-#51736b - accentDark
-#48665f - accentDarkest
-
-*/
-
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  /* overflow-y: hidden; */
 }
 
 html,
 body {
-  /* height: 100vh; */
-  /* max-width: 100vw; */
   font-family: "Roboto";
 }
 
 /* color: rgb(180, 184, 217) */
+
+/* COLORS ---- */

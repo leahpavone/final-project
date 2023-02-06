@@ -62,16 +62,7 @@ const AccountMenu = () => {
   }
 
   return (
-    <Box
-      sx={
-        {
-          // zIndex: 999,
-          // width: "fit-content",
-          // right: 16,
-          // top: 16,
-          // position: "absolute"
-        }
-      }>
+    <Box>
       {currentUser ? (
         <>
           <Box
@@ -81,9 +72,6 @@ const AccountMenu = () => {
               top: 16,
               position: "absolute",
               backgroundColor: "primary.light",
-              // display: "flex",
-              // alignItems: "center",
-              // gap: "5px",
               borderRadius: "500px"
             }}>
             <Tooltip title="Menu">
@@ -227,8 +215,6 @@ const AccountMenu = () => {
             to={"/register"}>
             Register
           </Button>
-          {/* <Link to="/login">Login</Link> */}
-          {/* <Link to="/register">Register</Link> */}
         </Box>
       )}
     </Box>

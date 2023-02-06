@@ -12,7 +12,6 @@ const UploadProfilePhoto = () => {
   const [photoURL, setPhotoURL] = useState(<Avatar />);
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [isUpdating, setIsUpdating] = useState(false);
 
   const { user } = useContext(UserContext);
 
@@ -109,7 +108,6 @@ const UploadProfilePhoto = () => {
         variant="contained"
         component="label"
         sx={{
-          // height: "max-content",
           width: "max-content",
           height: "20px"
         }}>

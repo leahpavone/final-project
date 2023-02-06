@@ -1,6 +1,4 @@
-import { useContext, useState } from "react";
-// import PropTypes from "prop-types";
-// import AppBar from "@mui/material/AppBar";
+import { useState } from "react";
 import {
   CssBaseline,
   Box,
@@ -8,44 +6,26 @@ import {
   Drawer,
   IconButton,
   List,
-  ListItem,
-  ListItemButton,
   ListItemIcon,
   ListItemText,
   Typography,
   Toolbar,
   Button
-  // Link
 } from "@mui/material";
-import {
-  Menu,
-  Home,
-  Star,
-  FeaturedPlayList,
-  Search,
-  LibraryMusic
-} from "@mui/icons-material";
-import AuthContext from "../context/AuthContext";
+import { Menu, Home, Star, Search, LibraryMusic } from "@mui/icons-material";
 import SpotifyIcon from "../assets/spotify.svg";
 import { Link, NavLink } from "react-router-dom";
-import { PageSpinner } from "./Spinners";
+// import { PageSpinner } from "./Spinners";
 
 const drawerWidth = 220;
 
 function UserDrawer(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-
-  const { currentUser } = useContext(AuthContext);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-
-  if (loading) {
-    return <PageSpinner />;
-  }
 
   const drawer = (
     <div>
@@ -168,17 +148,8 @@ function UserDrawer(props) {
     <Box
       sx={{
         display: "flex"
-        // position: "fixed",
-        // width: "calc(100% - 220px)"
       }}>
       <CssBaseline />
-      {/* <AppBar
-        position="fixed"
-        sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` }
-        }}> */}
-      {/* <Toolbar> */}
       <IconButton
         color="inherit"
         aria-label="open drawer"
@@ -198,11 +169,6 @@ function UserDrawer(props) {
         }}>
         <Menu sx={{ color: "accent.main" }} />
       </IconButton>
-      {/* <Typography variant="h6" noWrap component="div">
-          Responsive drawer
-        </Typography> */}
-      {/* </Toolbar> */}
-      {/* </AppBar> */}
       <Box
         component="nav"
         sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
@@ -243,28 +209,8 @@ function UserDrawer(props) {
           {drawer}
         </Drawer>
       </Box>
-      {/* <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          // p: 3,
-          // width: "100%"
-          width: { sm: `calc(100% - ${drawerWidth}px)` }
-        }}>
-        <Toolbar />
-        <Typography paragraph>a</Typography>
-        <Typography paragraph>b</Typography>
-      </Box> */}
     </Box>
   );
 }
-
-// ResponsiveDrawer.propTypes = {
-//   /**
-//    * Injected by the documentation to work in an iframe.
-//    * You won't need it on your project.
-//    */
-//   window: PropTypes.func
-// };
 
 export default UserDrawer;

@@ -10,16 +10,15 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ProfileDetails from "./pages/ProfileDetails";
 import { UserProvider } from "./context/UserContext";
 import { CssBaseline } from "@mui/material";
-import { purple, blueGrey } from "@mui/material/colors";
 import Search from "./pages/Search";
 import Favorites from "./pages/Favorites";
 import Playlists from "./pages/Playlists";
+import NotFound from "./pages/NotFound";
 
 function App() {
   const theme = createTheme({
     palette: {
       background: "#1a1a1a",
-      // mode: "dark",
       text: {
         disabled: "#4c4c4c"
       },
@@ -77,20 +76,10 @@ function App() {
         styleOverrides: {
           "&.MuiTypography-root": {
             color: "#b59bca"
-            // "&:disabled": {
-            //   borderColor: "#5b4e65",
-            //   border: "2px"
-            // }
           },
           "&.MuiInputBase-root": {
             borderRadius: "4px",
-            // "&:disabled": {
-            //   borderColor: "#fff",
-            //   borderWidth: "5px"
-            // },
             "&.MuiOutlinedInput-root": {
-              // display: "flex",
-              // flex: 1,
               input: {
                 color: "#917ca2"
               },
@@ -142,8 +131,6 @@ function App() {
             ".css-l8tig1-MuiButtonBase-root-MuiButton-root": {
               color: "#b59bca",
               boxShadow: "none !important",
-              // height: "30px",
-              // width: "250px",
               backgroundColor: "transparent",
               "&:hover": {
                 color: "#5b4e65 !important"
@@ -188,12 +175,6 @@ function App() {
     }
   });
 
-  // extra small, xs: 0px
-  // small, sm: 600px
-  // medium, md: 900px
-  // large, lg: 1200px
-  // extra large, xl: 1536px
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -211,15 +192,14 @@ function App() {
               <Route path="/profile-details" element={<PrivateRoute />}>
                 <Route path="/profile-details" element={<ProfileDetails />} />
               </Route>
-              {/* <Route path="/search" element={<PrivateRoute />}> */}
               <Route path="/search" element={<Search />} />
-              {/* </Route> */}
               <Route path="/favorites" element={<PrivateRoute />}>
                 <Route path="/favorites" element={<Favorites />} />
               </Route>
               <Route path="/playlists" element={<PrivateRoute />}>
                 <Route path="/playlists" element={<Playlists />} />
               </Route>
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </Router>
         </UserProvider>
@@ -229,3 +209,9 @@ function App() {
 }
 
 export default App;
+
+// extra small, xs: 0px
+// small, sm: 600px
+// medium, md: 900px
+// large, lg: 1200px
+// extra large, xl: 1536px

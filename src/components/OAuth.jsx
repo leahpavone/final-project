@@ -1,10 +1,10 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../utilities/firebase";
 import googleIcon from "../assets/googleIcon.svg";
 import dayjs from "dayjs";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button, Divider } from "@mui/material";
 import { useState } from "react";
 
 function OAuth() {
@@ -54,45 +54,89 @@ function OAuth() {
   return (
     <Box
       sx={{
+        height: "100%",
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
-        gap: "8px",
-        padding: "10px"
+        gap: "10px"
       }}>
-      <Button
-        disableRipple
-        onClick={onGoogleClick}
-        sx={{
-          cursor: "pointer",
-          backgroundColor: "#fff !important",
-          boxShadow: "0 0 2px rgba(255,255,255, 0.4)",
-          p: 1,
-          display: "flex",
-          alignItems: "center",
-          gap: "10px",
-          "&:hover": {
-            backgroundColor: "#f0ebf4 !important",
-            transition: "all 0.2s ease",
-            boxShadow: "0 0 6px rgba(255,255,255, 0.5)"
-          }
-        }}>
-        <img
-          className="social-icon-img"
-          src={googleIcon}
-          alt="google"
-          style={{ height: "24px", width: "24px" }}
-        />
-        <Typography
+      <Box sx={{ pt: "24px" }}>
+        <Divider
           sx={{
-            lineHeight: 1,
-            letterSpacing: "1px",
-            fontSize: "14px",
-            color: "primary.main"
+            color: "rgba(181, 155, 202, 0.5)",
+            width: "95%",
+            margin: "0 auto",
+            "&::before": {
+              borderTop: "thin solid rgba(181, 155, 202, 0.5)"
+            },
+            "&::after": {
+              borderTop: "thin solid rgba(181, 155, 202, 0.5)"
+            }
           }}>
-          Sign {location.pathname === "/register" ? "up" : "in"} with Google
+          or
+        </Divider>
+      </Box>
+
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "8px",
+          padding: "10px"
+        }}>
+        <Button
+          disableRipple
+          onClick={onGoogleClick}
+          sx={{
+            cursor: "pointer",
+            backgroundColor: "#fff !important",
+            boxShadow: "0 0 2px rgba(255,255,255, 0.4)",
+            p: 1,
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            "&:hover": {
+              backgroundColor: "#f0ebf4 !important",
+              transition: "all 0.2s ease",
+              boxShadow: "0 0 6px rgba(255,255,255, 0.5)"
+            }
+          }}>
+          <img
+            className="social-icon-img"
+            src={googleIcon}
+            alt="google"
+            style={{ height: "24px", width: "24px" }}
+          />
+          <Typography
+            sx={{
+              lineHeight: 1,
+              letterSpacing: "1px",
+              fontSize: "14px",
+              color: "primary.main"
+            }}>
+            Sign {location.pathname === "/register" ? "up" : "in"} with Google
+          </Typography>
+        </Button>
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center"
+        }}>
+        <Typography
+          variant="subtitle1"
+          sx={{ color: "rgba(181, 155, 202, 0.7)" }}>
+          Don't have an account yet?
         </Typography>
-      </Button>
+        <Button
+          component={Link}
+          variant="text"
+          sx={{ fontSize: "16px", letterSpacing: "1px", p: 0 }}
+          to={location.pathname === "/register" ? "/login" : "/register"}>
+          {location.pathname === "/register" ? "Login" : "Create an account"}
+        </Button>
+      </Box>
     </Box>
   );
 }

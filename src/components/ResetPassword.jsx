@@ -38,7 +38,6 @@ function ResetPassword() {
       setFieldError(
         "Password must contain at least: at least 6 characters, 1 uppercase character, 1 lowercase character, and 1 numeric character."
       );
-      // setLoading(false);
       setLoading(false);
       newPasswordRef.current.value = "";
     } else {
@@ -74,13 +73,9 @@ function ResetPassword() {
     <Box
       sx={{
         display: "flex",
-        // flex: 1,
         alignItems: "flex-end",
         width: "100%",
         justifyContent: "space-between"
-        // maxWidth: "50%"
-        // minHeight: "200px"
-        // p: 3
       }}>
       <Box
         component="form"
@@ -90,17 +85,12 @@ function ResetPassword() {
           width: "100%",
           display: "flex",
           alignItems: "flex-end"
-          // flex: "1 0 auto"
-          // pt: "20px"
         }}>
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
-            // height: "100%",
             flex: "1",
-            // justifyContent: "flex-start",
-            // gap: "1px",
             width: "100%"
           }}>
           <Typography
@@ -110,26 +100,20 @@ function ResetPassword() {
           </Typography>
           <Box
             sx={{
-              // width: "100%",
               display: "flex",
               flexDirection: "column"
-              // flex: 1
             }}>
             <TextField
-              onChange={handleChange}
-              // disabled={newPassError}
-              // fullWidth
-              // error={fieldError}
-              error={newPassError}
-              size="small"
-              placeholder="New password"
-              inputRef={newPasswordRef}
               variant="outlined"
+              size="small"
               type={newPassVisible ? "text" : "password"}
+              placeholder="New password"
+              onChange={handleChange}
+              error={newPassError}
+              inputRef={newPasswordRef}
               sx={{
                 position: "relative",
                 borderColor: newPassError ? "#fff" : "accent.main"
-                // border: "1px solid"
               }}
               InputProps={{
                 endAdornment: (
@@ -147,7 +131,6 @@ function ResetPassword() {
               }}
             />
 
-            {/* <Box> */}
             {fieldError && (
               <Typography
                 variant="caption"
@@ -156,15 +139,11 @@ function ResetPassword() {
                   gap: "5px",
                   color: "error.main",
                   pt: "5px"
-                  // position: "absolute",
-                  // bottom: "50%",
-                  // transform: "translateY(220%)"
                 }}>
                 <ErrorOutline sx={{ height: "16px", width: "16px" }} />
                 {fieldError}
               </Typography>
             )}
-            {/* </Box> */}
           </Box>
         </Box>
       </Box>
@@ -176,17 +155,8 @@ function ResetPassword() {
           component="label"
           onClick={handleSubmit}
           sx={{
-            // display: "flex",
-            // textAlign: "center",
-            // flex: 0,
-            // justifyContent: "flex-end",
-            // flexWrap: "nowrap",
-            // width: "fit-content",
             width: "100%",
-            // gap: "50px",
-            // fontSize: "12px",
             p: 0
-            // ml: 2
           }}>
           Save
         </Button>
