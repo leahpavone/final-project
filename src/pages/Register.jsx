@@ -12,7 +12,12 @@ import {
 } from "firebase/auth";
 import AuthContext from "../context/AuthContext";
 import OAuth from "../components/OAuth";
-import { Visibility, VisibilityOff, ErrorOutline } from "@mui/icons-material";
+import {
+  Visibility,
+  VisibilityOff,
+  ErrorOutline,
+  AccountBalance
+} from "@mui/icons-material";
 import {
   Button,
   Typography,
@@ -27,6 +32,7 @@ import { useFormik } from "formik";
 import InputField from "../components/InputField";
 import NoUserDrawer from "../components/NoUserDrawer";
 import { PageSpinner } from "../components/Spinners";
+import AccountMenu from "../components/AccountMenu";
 
 const Register = () => {
   const [currentPassVisible, setCurrentPassVisible] = useState(false);
@@ -129,6 +135,7 @@ const Register = () => {
         pb: 4
       }}>
       <NoUserDrawer />
+      <AccountMenu />
 
       <Box
         sx={{

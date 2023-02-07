@@ -422,11 +422,32 @@ function ProfileDetails() {
                         endAdornment: (
                           <InputAdornment
                             position="end"
-                            onClick={showCurrentPasswordClick}>
+                            onClick={
+                              isAuthenticated || !isResetting
+                                ? onclick
+                                : showCurrentPasswordClick
+                            }>
                             {currentPassVisible ? (
-                              <Visibility fontSize="small" />
+                              <Visibility
+                                disabled={isAuthenticated || !isResetting}
+                                fontSize="small"
+                                sx={{
+                                  color:
+                                    isAuthenticated || !isResetting
+                                      ? "#4c4c4c !important"
+                                      : "accent.main"
+                                }}
+                              />
                             ) : (
-                              <VisibilityOff fontSize="small" />
+                              <VisibilityOff
+                                fontSize="small"
+                                sx={{
+                                  color:
+                                    isAuthenticated || !isResetting
+                                      ? "#4c4c4c !important"
+                                      : "accent.main"
+                                }}
+                              />
                             )}
                           </InputAdornment>
                         )

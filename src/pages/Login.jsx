@@ -20,6 +20,7 @@ import InputField from "../components/InputField";
 import UserContext from "../context/UserContext";
 import NoUserDrawer from "../components/NoUserDrawer";
 import { PageSpinner } from "../components/Spinners";
+import AccountMenu from "../components/AccountMenu";
 
 const Login = () => {
   const [fieldError, setFieldError] = useState("");
@@ -100,6 +101,7 @@ const Login = () => {
         pb: 4
       }}>
       <NoUserDrawer />
+      <AccountMenu />
 
       <Box
         sx={{

@@ -66,7 +66,7 @@ function NoUserDrawer(props) {
           </Typography>
         </Button>
       </Toolbar>
-      <Divider />
+      {/* <Divider /> */}
       <List
         sx={{
           pt: 4,
@@ -116,7 +116,7 @@ function NoUserDrawer(props) {
           </NavLink>
         ))}
       </List>
-      <Divider />
+      {/* <Divider /> */}
     </div>
   );
 

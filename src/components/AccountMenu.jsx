@@ -119,9 +119,9 @@ const AccountMenu = () => {
               elevation: 0,
               sx: {
                 overflow: "visible",
-                filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                filter: "drop-shadow(0px 1px 10px rgba(200,200,200,0.05))",
                 mt: 1,
-                backgroundColor: "primary.darkest",
+                backgroundColor: "primary.dark",
                 color: "accent.main",
                 "& .MuiAvatar-root": {
                   width: 32,

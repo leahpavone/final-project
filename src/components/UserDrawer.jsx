@@ -73,7 +73,7 @@ function UserDrawer(props) {
           </Typography>
         </Button>
       </Toolbar>
-      <Divider />
+      {/* <Divider /> */}
       <List
         sx={{
           pt: 4,
@@ -137,7 +137,7 @@ function UserDrawer(props) {
           </NavLink>
         ))}
       </List>
-      <Divider />
+      {/* <Divider /> */}
     </div>
   );
 
@@ -190,7 +190,7 @@ function UserDrawer(props) {
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
-              backgroundColor: "primary.darkest"
+              backgroundColor: "primary.dark"
             }
           }}>
           {drawer}
@@ -202,7 +202,7 @@ function UserDrawer(props) {
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
-              backgroundColor: "primary.darkest"
+              backgroundColor: "primary.dark"
             }
           }}
           open>

@@ -23,9 +23,10 @@ function App() {
         disabled: "#4c4c4c"
       },
       primary: {
-        main: "#1a1a1a",
-        dark: "#171717",
-        darkest: "#121212",
+        // main: "#1a1a1a",
+        main: "#171717",
+        dark: "#121212",
+        darkest: "#0a0a0a",
         light: "#313131",
         lightest: "#e8e8e8"
       },
@@ -100,7 +101,6 @@ function App() {
                 borderWidth: "2.5px"
               },
               "&.Mui-disabled fieldset": {
-                // borderColor: "#fff",
                 border: "2px solid"
               }
             },
