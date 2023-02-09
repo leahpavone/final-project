@@ -63,7 +63,6 @@ const Register = () => {
       await axios
         .post(
           "http://127.0.0.1:5001/final-project-42d93/us-central1/api/createUser",
-
           {
             uid: userCredential.user.uid,
             name,
@@ -136,7 +135,6 @@ const Register = () => {
       }}>
       <NoUserDrawer />
       <AccountMenu />
-
       <Box
         sx={{
           display: "flex",

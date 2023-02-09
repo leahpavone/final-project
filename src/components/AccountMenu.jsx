@@ -53,7 +53,7 @@ const AccountMenu = () => {
     if (user?.name.length > 0) {
       const fN = user.name.split(" ")[0];
       setFirstName(fN);
-      console.log(fN);
+      // console.log(fN);
     }
   }, [user]);
 

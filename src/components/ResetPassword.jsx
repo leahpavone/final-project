@@ -29,7 +29,7 @@ function ResetPassword() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    console.log(e);
+    // console.log(e);
     if (
       newPasswordRef.current.value.length < 6 ||
       !newPasswordRef.current.value.match(passwordRules)

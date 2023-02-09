@@ -16,7 +16,7 @@ export const UserProvider = ({ children }) => {
     if (currentUser) {
       setLoading(true);
       onSnapshot(doc(db, "users", currentUser.uid), (doc) => {
-        console.log("Current data: ", doc.data());
+        // console.log("Current data: ", doc.data());
         setUser(doc.data());
         setLoading(false);
       });

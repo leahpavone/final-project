@@ -6,14 +6,13 @@ import { PageSpinner } from "../components/Spinners";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState(null);
-  // const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
-    onAuthStateChanged(auth, (currentUser) => {
+    onAuthStateChanged(auth, (user) => {
       setLoading(true);
-      setCurrentUser(auth.currentUser);
+      setCurrentUser(user);
       setLoading(false);
     });
   }, []);
@@ -27,8 +26,6 @@ export const AuthProvider = ({ children }) => {
       value={{
         loading,
         currentUser,
-        // loggedIn,
-        // setLoggedIn,
         setLoading,
         setCurrentUser
       }}>

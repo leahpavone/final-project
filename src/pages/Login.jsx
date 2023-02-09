@@ -2,7 +2,6 @@ import { useState, useContext, useEffect } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../utilities/firebase";
 import { useNavigate, Link } from "react-router-dom";
-import AuthContext from "../context/AuthContext";
 import OAuth from "../components/OAuth";
 import {
   Box,
@@ -15,7 +14,6 @@ import {
 import { ErrorOutline, Visibility, VisibilityOff } from "@mui/icons-material";
 import { loginFormSchema } from "../schemas";
 import { useFormik } from "formik";
-// import { useTheme } from "@mui/system";
 import InputField from "../components/InputField";
 import UserContext from "../context/UserContext";
 import NoUserDrawer from "../components/NoUserDrawer";
@@ -27,24 +25,19 @@ const Login = () => {
   const [currentPassVisible, setCurrentPassVisible] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // const theme = useTheme();
-  const { user } = useContext(AuthContext);
   const { currentUser } = useContext(UserContext);
 
   const navigate = useNavigate();
 
   const onSubmit = async (values, actions) => {
     setLoading(true);
-    console.log(values, actions);
     const { email, password } = values;
-    // actions.resetForm();
     try {
       await signInWithEmailAndPassword(auth, email, password);
       setLoading(false);
       navigate("/dashboard");
     } catch (error) {
       setLoading(false);
-      console.log(values, actions);
       console.log(error);
       const code = error.code;
       const message = error.message;
@@ -75,10 +68,8 @@ const Login = () => {
   });
   console.log(formik);
 
-  // how to delete password
-
   useEffect(() => {
-    if (currentUser) {
+    if (currentUser !== null) {
       navigate("/dashboard");
     }
   }, [currentUser, navigate]);
@@ -128,12 +119,12 @@ const Login = () => {
         {fieldError ? (
           <Box
             sx={{
-              color: "error.main",
-              fontSize: { xs: "16px", lg: "18px" },
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               gap: "5px",
+              color: "error.main",
+              fontSize: { xs: "16px", lg: "18px" },
               letterSpacing: "1px",
               fontWeight: "500",
               pb: 4
@@ -149,9 +140,9 @@ const Login = () => {
           component="form"
           onSubmit={formik.handleSubmit}
           sx={{
+            height: "fit-content",
             display: "flex",
             flexDirection: "column",
-            height: "fit-content",
             gap: "10px"
           }}>
           <Box

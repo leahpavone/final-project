@@ -1,15 +1,13 @@
-import { useContext, useEffect, useState } from "react";
-import { Avatar, Button, Box, Typography } from "@mui/material";
-import { auth, storage, db } from "../utilities/firebase";
+import { useContext, useState } from "react";
+import { Avatar, Button, Box } from "@mui/material";
+import { storage, db } from "../utilities/firebase";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import UserContext from "../context/UserContext";
 import { updateDoc, doc } from "firebase/firestore";
-import { updateProfile } from "firebase/auth";
 import dayjs from "dayjs";
 import { UploadProfilePhotoSpinner } from "./Spinners";
 
 const UploadProfilePhoto = () => {
-  const [photoURL, setPhotoURL] = useState(<Avatar />);
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -23,50 +21,27 @@ const UploadProfilePhoto = () => {
     setUploadingPhoto(false);
   };
 
+  //  over write user image name to be the same every time
+
   const handleUpload = async (photo) => {
     setLoading(true);
+    const photoRef = ref(storage, user.uid);
     try {
-      const photoRef = ref(storage, user.uid);
-      await uploadBytes(photoRef, photo)
-        .then(() => {
-          getDownloadURL(photoRef)
-            .then((url) => {
-              setPhotoURL(url);
-              updateProfile(auth.currentUser, {
-                photoURL: url
-              });
-
-              // update user doc
-              const docRef = doc(db, "users", user.uid);
-              updateDoc(docRef, {
-                photoURL: url,
-                updatedAt: dayjs().format("M/D/YYYY h:mm A")
-              })
-                .then(() => {
-                  console.log(url, "successfully updated photo");
-                })
-                .catch((error) => {
-                  console.log(error);
-                });
-            })
-            .catch((error) => {
-              console.log(error.message, "error getting the image url");
-            });
-        })
-        .catch((error) => {
-          console.log(error.message);
-        });
+      await uploadBytes(photoRef, photo);
+      const url = await getDownloadURL(photoRef);
+      // const namedUrl = ``
+      console.log("url", url);
+      // update user doc
+      const docRef = doc(db, "users", user.uid);
+      await updateDoc(docRef, {
+        photoURL: url,
+        updatedAt: dayjs().format("M/D/YYYY h:mm A")
+      });
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
     }
     setLoading(false);
   };
-
-  useEffect(() => {
-    if (user && user.photoURL) {
-      setPhotoURL(user.photoURL);
-    }
-  }, [user, photoURL]);
 
   if (loading) {
     return <UploadProfilePhotoSpinner />;
