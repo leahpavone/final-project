@@ -2,6 +2,8 @@ import { useState, useRef } from "react";
 import { updatePassword } from "firebase/auth";
 import { auth } from "../utilities/firebase";
 import { useNavigate } from "react-router-dom";
+import { passwordRules } from "../schemas";
+import { PageSpinner } from "./Spinners";
 import { ErrorOutline, Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Box,
@@ -10,8 +12,6 @@ import {
   InputAdornment,
   TextField
 } from "@mui/material";
-import { passwordRules } from "../schemas";
-import { PageSpinner } from "./Spinners";
 
 function ResetPassword() {
   const [loading, setLoading] = useState(false);

@@ -1,11 +1,11 @@
-import { useLocation, useNavigate, Link } from "react-router-dom";
+import { useState } from "react";
+import dayjs from "dayjs";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../utilities/firebase";
-import googleIcon from "../assets/googleIcon.svg";
-import dayjs from "dayjs";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { Box, Typography, Button, Divider } from "@mui/material";
-import { useState } from "react";
+import googleIcon from "../assets/googleIcon.svg";
 
 function OAuth() {
   const [loading, setLoading] = useState(false);
@@ -59,11 +59,11 @@ function OAuth() {
         flexDirection: "column",
         gap: "10px"
       }}>
-      <Box sx={{ pt: "24px" }}>
+      <Box sx={{ pt: 1 }}>
         <Divider
           sx={{
             color: "rgba(181, 155, 202, 0.5)",
-            width: "95%",
+            // width: "95%",
             margin: "0 auto",
             "&::before": {
               borderTop: "thin solid rgba(181, 155, 202, 0.5)"
@@ -127,7 +127,9 @@ function OAuth() {
         <Typography
           variant="subtitle1"
           sx={{ color: "rgba(181, 155, 202, 0.7)" }}>
-          Don't have an account yet?
+          {location.pathname === "/register"
+            ? "Already have an account?"
+            : "Don't have an account yet?"}
         </Typography>
         <Button
           component={Link}

@@ -1,9 +1,17 @@
 import { useState, useContext, useEffect } from "react";
 import UserContext from "../context/UserContext";
-import { Typography, Container } from "@mui/material";
 import AccountMenu from "../components/AccountMenu";
-import { PageSpinner } from "../components/Spinners";
 import UserDrawer from "../components/UserDrawer";
+import { PageSpinner } from "../components/Spinners";
+import {
+  Typography,
+  Container,
+  Fade,
+  Slide,
+  Collapse,
+  Zoom,
+  Grow
+} from "@mui/material";
 
 const Dashboard = () => {
   const [loading, setLoading] = useState(false);
@@ -36,14 +44,16 @@ const Dashboard = () => {
       }}>
       <UserDrawer />
       <AccountMenu />
-      <Container
-        sx={{
-          textAlign: "center"
-        }}>
-        <Typography variant="h4" sx={{ mt: 2 }}>
-          {firstName}'s Dashboard
-        </Typography>
-      </Container>
+      <Fade in={true} timeout={500}>
+        <Container
+          sx={{
+            textAlign: "center"
+          }}>
+          <Typography variant="h4" sx={{ mt: 2 }}>
+            {firstName}'s Dashboard
+          </Typography>
+        </Container>
+      </Fade>
     </Container>
   );
 };

@@ -2,7 +2,6 @@ import * as React from "react";
 import {
   CssBaseline,
   Box,
-  Divider,
   Drawer,
   IconButton,
   List,
@@ -116,7 +115,6 @@ function NoUserDrawer(props) {
           </NavLink>
         ))}
       </List>
-      {/* <Divider /> */}
     </div>
   );
 

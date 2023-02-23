@@ -2,11 +2,18 @@ import { useState, useEffect } from "react";
 import { auth } from "../utilities/firebase";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { Box, Button, Container, TextField, Typography } from "@mui/material";
-import { ErrorOutline } from "@mui/icons-material";
-import { PageSpinner } from "../components/Spinners";
 import AccountMenu from "../components/AccountMenu";
 import NoUserDrawer from "../components/NoUserDrawer";
+import { PageSpinner } from "../components/Spinners";
+import { ErrorOutline } from "@mui/icons-material";
+import {
+  Box,
+  Button,
+  Container,
+  TextField,
+  Typography,
+  Fade
+} from "@mui/material";
 
 function ForgotPassword() {
   const [loading, setLoading] = useState(false);
@@ -70,82 +77,84 @@ function ForgotPassword() {
       }}>
       <AccountMenu />
       <NoUserDrawer />
-      <Box
-        sx={{
-          width: "100%",
-          minHeight: "100%",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          borderRadius: "4px",
-          ml: { xs: 0, md: "220px" },
-          pt: 4
-        }}>
-        <Typography variant="h4" sx={{ p: 3 }}>
-          Reset your password
-        </Typography>
-
-        {emailSent && (
-          <Typography variant="h5" color="error.main">
-            Email sent! Please follow the instructions contained in the email.
-          </Typography>
-        )}
-
-        {fieldError && (
-          <Typography
-            variant="caption"
-            sx={{
-              display: "flex",
-              gap: "5px",
-              color: "error.main",
-              pt: "5px"
-            }}>
-            <ErrorOutline sx={{ height: "16px", width: "16px" }} />
-            {fieldError}
-          </Typography>
-        )}
+      <Fade in={true} timeout={500}>
         <Box
           sx={{
             width: "100%",
-            height: "100%",
+            minHeight: "100%",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            gap: "10px"
+            borderRadius: "4px",
+            ml: { xs: 0, md: "220px" },
+            pt: 4
           }}>
+          <Typography variant="h4" sx={{ p: 3 }}>
+            Reset your password
+          </Typography>
+
+          {emailSent && (
+            <Typography variant="h5" color="error.main">
+              Email sent! Please follow the instructions contained in the email.
+            </Typography>
+          )}
+
+          {fieldError && (
+            <Typography
+              variant="caption"
+              sx={{
+                display: "flex",
+                gap: "5px",
+                color: "error.main",
+                pt: "5px"
+              }}>
+              <ErrorOutline sx={{ height: "16px", width: "16px" }} />
+              {fieldError}
+            </Typography>
+          )}
           <Box
-            component="form"
-            onSubmit={handleSubmit}
             sx={{
+              width: "100%",
               height: "100%",
-              width: "40%",
               display: "flex",
               flexDirection: "column",
-              gap: "10px",
-              pt: "30px"
+              alignItems: "center",
+              gap: "10px"
             }}>
-            <Typography variant="subtitle2">
-              Please enter your email:
-            </Typography>
-            <TextField
-              variant="outlined"
-              placeholder="Enter your email"
-              onChange={handleChange}
-              required
-            />
-            <Button
-              type="submit"
-              variant="text"
+            <Box
+              component="form"
+              onSubmit={handleSubmit}
               sx={{
-                width: "fit-content",
-                height: "fit-content",
-                p: 0
+                height: "100%",
+                width: "40%",
+                display: "flex",
+                flexDirection: "column",
+                gap: "10px",
+                pt: "30px"
               }}>
-              Submit
-            </Button>
+              <Typography variant="subtitle2">
+                Please enter your email:
+              </Typography>
+              <TextField
+                variant="outlined"
+                placeholder="Enter your email"
+                onChange={handleChange}
+                required
+              />
+              <Button
+                type="submit"
+                variant="text"
+                sx={{
+                  width: "fit-content",
+                  height: "fit-content",
+                  p: 0
+                }}>
+                Submit
+              </Button>
+            </Box>
           </Box>
         </Box>
-      </Box>
+      </Fade>
     </Container>
   );
 }

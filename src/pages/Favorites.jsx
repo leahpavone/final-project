@@ -1,17 +1,15 @@
 import { useState, useContext } from "react";
-import { Container, Typography } from "@mui/material";
 import UserDrawer from "../components/UserDrawer";
 import AccountMenu from "../components/AccountMenu";
-// import AuthContext from "../context/AuthContext";
-// import UserContext from "../context/UserContext";
+import UserContext from "../context/UserContext";
 import { PageSpinner } from "../components/Spinners";
+import { Container, Typography, Box, Fade } from "@mui/material";
 // import { Link } from "react-router-dom";
 
 const Favorites = () => {
   const [loading, setLoading] = useState(false);
 
-  // const { currentUser } = useContext(AuthContext);
-  // const { user } = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   if (loading) {
     return <PageSpinner />;
@@ -28,15 +26,27 @@ const Favorites = () => {
       }}>
       <UserDrawer />
       <AccountMenu />
-
-      <Container
-        sx={{
-          textAlign: "center"
-        }}>
-        <Typography variant="h4" sx={{ p: 3 }}>
-          Favorites
-        </Typography>
-      </Container>
+      <Fade in={true} timeout={500}>
+        <Container
+          sx={{
+            textAlign: "center"
+          }}>
+          <Typography variant="h4" sx={{ p: 3 }}>
+            Favorites
+          </Typography>
+          {user?.favorites?.length > 0 ? (
+            user?.favorites.map((favorite, id) => (
+              <Typography variant="h6" key={id}>
+                {favorite}
+              </Typography>
+            ))
+          ) : (
+            <Typography variant="h5">
+              You do not have any favorites yet
+            </Typography>
+          )}
+        </Container>
+      </Fade>
     </Container>
   );
 };

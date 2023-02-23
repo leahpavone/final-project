@@ -1,11 +1,11 @@
 import { useContext, useState } from "react";
-import { Avatar, Button, Box } from "@mui/material";
+import dayjs from "dayjs";
 import { storage, db } from "../utilities/firebase";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
-import UserContext from "../context/UserContext";
 import { updateDoc, doc } from "firebase/firestore";
-import dayjs from "dayjs";
+import UserContext from "../context/UserContext";
 import { UploadProfilePhotoSpinner } from "./Spinners";
+import { Avatar, Button, Box } from "@mui/material";
 
 const UploadProfilePhoto = () => {
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
@@ -17,20 +17,16 @@ const UploadProfilePhoto = () => {
     setUploadingPhoto(true);
     const value = e?.target?.files[0];
     await handleUpload(value);
-    console.log("after change", value);
     setUploadingPhoto(false);
   };
 
-  //  over write user image name to be the same every time
-
   const handleUpload = async (photo) => {
     setLoading(true);
-    const photoRef = ref(storage, user.uid);
+    const photoRef = ref(storage, `User Images/${user.name}/Profile Photo`);
     try {
       await uploadBytes(photoRef, photo);
       const url = await getDownloadURL(photoRef);
-      // const namedUrl = ``
-      console.log("url", url);
+
       // update user doc
       const docRef = doc(db, "users", user.uid);
       await updateDoc(docRef, {

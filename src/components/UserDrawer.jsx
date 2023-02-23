@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { Link, NavLink } from "react-router-dom";
+import SpotifyIcon from "../assets/spotify.svg";
+import { Menu, Home, Star, Search, LibraryMusic } from "@mui/icons-material";
 import {
   CssBaseline,
   Box,
-  Divider,
   Drawer,
   IconButton,
   List,
@@ -12,10 +14,6 @@ import {
   Toolbar,
   Button
 } from "@mui/material";
-import { Menu, Home, Star, Search, LibraryMusic } from "@mui/icons-material";
-import SpotifyIcon from "../assets/spotify.svg";
-import { Link, NavLink } from "react-router-dom";
-// import { PageSpinner } from "./Spinners";
 
 const drawerWidth = 220;
 
@@ -62,18 +60,11 @@ function UserDrawer(props) {
             sx={{
               fontSize: "18px",
               fontWeight: 500
-              // ".MuiButton-text.MuiTypography-root": {
-              //   color: "blue",
-              //   "&:hover": {
-              //     textDecoration: "none"
-              //   }
-              // }
             }}>
             Spotify Clone
           </Typography>
         </Button>
       </Toolbar>
-      {/* <Divider /> */}
       <List
         sx={{
           pt: 4,
@@ -106,6 +97,7 @@ function UserDrawer(props) {
                     justifyContent: "space-around",
                     width: "100%",
                     height: "48px"
+                    // transition: "all 1s ease"
                   }
                 : {
                     textDecoration: "none",
@@ -115,6 +107,7 @@ function UserDrawer(props) {
                     justifyContent: "space-around",
                     width: "100%",
                     height: "48px"
+                    // transition: "all 1s ease"
                   }
             }>
             <ListItemIcon sx={{ pl: 2 }}>
@@ -137,7 +130,6 @@ function UserDrawer(props) {
           </NavLink>
         ))}
       </List>
-      {/* <Divider /> */}
     </div>
   );
 

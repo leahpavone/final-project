@@ -19,7 +19,8 @@ const theme = createTheme({
       dark: "#121212",
       darkest: "#0a0a0a",
       light: "#313131",
-      lightest: "#e8e8e8"
+      lightest: "#e8e8e8",
+      light2: "#2e2e2e"
     },
     // secondary: {
     //   main: "#faf9f6",
@@ -71,13 +72,14 @@ const theme = createTheme({
         },
         "&.MuiInputBase-root": {
           borderRadius: "4px",
+          // width: "fit-content",
           "&.MuiOutlinedInput-root": {
             input: {
               color: "#917ca2"
             },
             "& fieldset": {
               borderColor: "#b59bca",
-              borderWidth: "2px"
+              borderWidth: "1px"
             },
             "&:hover:not(.Mui-error):not(.Mui-disabled) fieldset ": {
               borderColor: "#917ca2",
@@ -85,14 +87,14 @@ const theme = createTheme({
             },
             "&.Mui-focused:not(.Mui-error):not(.Mui-disabled) fieldset": {
               borderColor: "#917ca2",
-              borderWidth: "2.5px"
+              borderWidth: "2px"
             },
             "&.Mui-error fieldset": {
               borderColor: "#fff",
-              borderWidth: "2.5px"
+              borderWidth: "2px"
             },
             "&.Mui-disabled fieldset": {
-              border: "2px solid"
+              border: "1px solid"
             }
           },
           "& .MuiSvgIcon-root": {

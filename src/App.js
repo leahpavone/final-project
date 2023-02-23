@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute";
+import PublicRoute from "./components/PublicRoute";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
@@ -16,10 +17,32 @@ function App() {
     <Router>
       <Routes>
         <Route index path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        {/* <Route path="/dashboard" element={<PrivateRoute />}> */}
+
+        <Route
+          path="/login"
+          element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <PublicRoute>
+              <Register />
+            </PublicRoute>
+          }
+        />
+
+        <Route
+          path="/forgot-password"
+          element={
+            <PublicRoute>
+              <ForgotPassword />
+            </PublicRoute>
+          }
+        />
         <Route
           path="/dashboard"
           element={
@@ -28,8 +51,6 @@ function App() {
             </PrivateRoute>
           }
         />
-        {/* </Route> */}
-        {/* <Route path="/profile-details" element={<PrivateRoute />}> */}
         <Route
           path="/profile-details"
           element={
@@ -38,9 +59,7 @@ function App() {
             </PrivateRoute>
           }
         />
-        {/* </Route> */}
         <Route path="/search" element={<Search />} />
-        {/* <Route path="/favorites" element={<PrivateRoute />}> */}
         <Route
           path="/favorites"
           element={
@@ -49,8 +68,6 @@ function App() {
             </PrivateRoute>
           }
         />
-        {/* </Route> */}
-        {/* <Route path="/playlists" element={<PrivateRoute />}> */}
         <Route
           path="/playlists"
           element={
@@ -59,7 +76,6 @@ function App() {
             </PrivateRoute>
           }
         />
-        {/* </Route> */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>

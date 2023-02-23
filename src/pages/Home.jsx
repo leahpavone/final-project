@@ -1,12 +1,12 @@
 import { useState, useEffect, useContext } from "react";
-import { Container, Typography } from "@mui/material";
 import UserContext from "../context/UserContext";
 import AuthContext from "../context/AuthContext";
 import AccountMenu from "../components/AccountMenu";
 import UserDrawer from "../components/UserDrawer";
 import NoUserDrawer from "../components/NoUserDrawer";
 import { PageSpinner } from "../components/Spinners";
-import { Link } from "react-router-dom";
+import { Container, Typography, Fade } from "@mui/material";
+// import { Link } from "react-router-dom";
 
 const Home = () => {
   const [loading, setLoading] = useState(false);
@@ -28,15 +28,16 @@ const Home = () => {
       }}>
       {currentUser ? <UserDrawer /> : <NoUserDrawer />}
       <AccountMenu />
-
-      <Container
-        sx={{
-          textAlign: "center"
-        }}>
-        <Typography variant="h4" sx={{ p: 3 }}>
-          listen to your favorite music
-        </Typography>
-      </Container>
+      <Fade in={true} timeout={500}>
+        <Container
+          sx={{
+            textAlign: "center"
+          }}>
+          <Typography variant="h4" sx={{ p: 3 }}>
+            listen to your favorite music
+          </Typography>
+        </Container>
+      </Fade>
     </Container>
   );
 };

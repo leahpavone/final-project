@@ -1,11 +1,9 @@
 import { TextField, InputAdornment, Typography, Box } from "@mui/material";
-import { useFormik } from "formik";
-import { styled } from "@mui/system";
 import { ErrorOutline } from "@mui/icons-material";
 
 const InputField = ({ formik, name, type, label, placeholder, icon }) => {
   return (
-    <>
+    <Box>
       <Typography
         variant="subtitle2"
         color={
@@ -32,15 +30,15 @@ const InputField = ({ formik, name, type, label, placeholder, icon }) => {
             },
             "& fieldset": {
               borderColor: "accent.main",
-              borderWidth: "2px"
+              borderWidth: "1px"
             },
             "&:hover:not(.Mui-error) fieldset ": {
               borderColor: "accent.light",
-              borderWidth: "2.5px"
+              borderWidth: "2px"
             },
             "&.Mui-focused:not(.Mui-error) fieldset": {
               borderColor: "accent.light",
-              borderWidth: "2.5px"
+              borderWidth: "2px"
             },
             "&.Mui-error fieldset": {
               borderColor: "error.main",
@@ -63,23 +61,21 @@ const InputField = ({ formik, name, type, label, placeholder, icon }) => {
         }}
       />
 
-      <Box>
-        {formik.touched[name] && formik.errors[name] && (
-          <Typography
-            variant="caption"
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: "5px",
-              height: "min-content",
-              color: "error.main"
-            }}>
-            <ErrorOutline sx={{ height: "16px", width: "16px" }} />
-            {formik.touched[name] && formik.errors[name]}
-          </Typography>
-        )}
-      </Box>
-    </>
+      {formik.touched[name] && formik.errors[name] && (
+        <Typography
+          variant="caption"
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: "5px",
+            height: "min-content",
+            color: "error.main"
+          }}>
+          <ErrorOutline sx={{ height: "16px", width: "16px" }} />
+          {formik.touched[name] && formik.errors[name]}
+        </Typography>
+      )}
+    </Box>
   );
 };
 

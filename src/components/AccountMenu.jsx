@@ -1,5 +1,10 @@
 import { useState, useContext, useEffect } from "react";
-
+import { Logout, Home, Dashboard, ManageAccounts } from "@mui/icons-material";
+import { auth } from "../utilities/firebase";
+import { Link, useNavigate } from "react-router-dom";
+import UserContext from "../context/UserContext";
+import AuthContext from "../context/AuthContext";
+import { MiniSpinner } from "./Spinners";
 import {
   Box,
   Avatar,
@@ -12,18 +17,6 @@ import {
   Typography,
   Button
 } from "@mui/material";
-import {
-  Logout,
-  Home,
-  Dashboard,
-  ManageAccounts,
-  ArrowDropDown
-} from "@mui/icons-material";
-import { auth } from "../utilities/firebase";
-import { Link, useNavigate } from "react-router-dom";
-import UserContext from "../context/UserContext";
-import AuthContext from "../context/AuthContext";
-import { MiniSpinner } from "./Spinners";
 
 const AccountMenu = () => {
   const [loading, setLoading] = useState(false);
@@ -49,13 +42,13 @@ const AccountMenu = () => {
     navigate("/");
   };
 
-  useEffect(() => {
-    if (user?.name.length > 0) {
-      const fN = user.name.split(" ")[0];
-      setFirstName(fN);
-      // console.log(fN);
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user?.name.length > 0) {
+  //     const fN = user.name.split(" ")[0];
+  //     setFirstName(fN);
+  //     // console.log(fN);
+  //   }
+  // }, [user]);
 
   if (loading) {
     return <MiniSpinner />;

@@ -1,6 +1,5 @@
-import React from "react";
 import { Link } from "react-router-dom";
-import { Button, Container, Typography } from "@mui/material";
+import { Button, Container, Typography, Fade, Box } from "@mui/material";
 
 const NotFound = () => {
   return (
@@ -16,12 +15,24 @@ const NotFound = () => {
         pt: 4,
         pb: 4
       }}>
-      <Typography variant="h3" sx={{ p: 4 }}>
-        Page Not Found
-      </Typography>
-      <Button component={Link} variant="contained" to={"/"}>
-        Go Back Home
-      </Button>
+      <Fade in={true} timeout={500}>
+        <Box
+          sx={{
+            height: "100%",
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center"
+          }}>
+          <Typography variant="h3" sx={{ p: 4 }}>
+            Page Not Found
+          </Typography>
+          <Button component={Link} variant="contained" to={"/"}>
+            Go Back Home
+          </Button>
+        </Box>
+      </Fade>
     </Container>
   );
 };
